@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 1ns / 1ns
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -21,47 +21,54 @@
 
 
 module SPI_Master(
-//    input logic AXI_valid,
-//    output logic AXI_ready,
-    input logic ena,
+    output logic ena = 0,
+    input logic AXI_valid,
+    output logic AXI_ready = 1,
     output logic SCK = 0,
-    output logic CSn,
+    output logic CSn = 1,
     input logic MISO,
     input logic [15:0] input_data,
     output logic MOSI,
     output logic [3:0] bit_counter = 15
     );
     
-    logic counter_en = 1;
+    //logic counter_en = 1;
+    //logic ena = 1;
     
     always #10 SCK = ~SCK;
     
-    always_ff @(negedge SCK) begin
-        MOSI <= input_data[bit_counter];
+    always_ff @(posedge SCK) begin
+        if (AXI_valid && AXI_ready)
+            ena <= 1;
     end
     
     always_ff @(negedge SCK) begin
-        if (counter_en) begin
-            if (bit_counter == 0) begin
-                //bit_counter <= 15;
-            end else begin
-                bit_counter <= bit_counter - 1;
-            end
+        if (ena)
+            bit_counter <= bit_counter - 1;
+        else
+            bit_counter <= 15;
+    end
+    
+    always_ff @(negedge SCK) begin
+        if (ena) begin
+            CSn <= 0;
+            AXI_ready <= 0;
+        end else begin
+            CSn <= 1;
+            AXI_ready <= 1;
         end
     end
     
-//    always_ff @(negedge SCK) begin
-//        if (bit_counter == 0)
-//            counter_en = 0;
-//        else
-//            counter_en = 1;
-//    end
-
-//    always @(counter_en) begin
-//        if (counter_en)
-//            CSn = 0;
-//        else
-//            CSn = 1;
-//    end
+    always_ff @(negedge SCK) begin
+        if (ena)
+            MOSI <= input_data[bit_counter];
+        else
+            MOSI <= 'X; // dla odróżnienia
+    end
+    
+    always_ff @(negedge SCK) begin
+        if (bit_counter == 0)
+            ena <= 0;
+    end
     
 endmodule
