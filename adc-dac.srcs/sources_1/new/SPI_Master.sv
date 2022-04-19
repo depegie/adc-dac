@@ -21,19 +21,17 @@
 
 
 module SPI_Master(
-    output logic ena = 0,
+    input logic MISO,
+    input logic [15:0] input_data,
     input logic AXI_valid,
     output logic AXI_ready = 1,
     output logic SCK = 0,
     output logic CSn = 1,
-    input logic MISO,
-    input logic [15:0] input_data,
     output logic MOSI,
-    output logic [3:0] bit_counter = 15
-    );
     
-    //logic counter_en = 1;
-    //logic ena = 1;
+    output logic ena = 0,//
+    output logic [3:0] bit_counter = 15//
+    );
     
     always #10 SCK = ~SCK;
     
