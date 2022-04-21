@@ -22,7 +22,7 @@
 
 module SPI_Master(
     input logic MISO,
-    input logic [15:0] input_data,
+    input logic [11:0] input_data,
     input logic AXI_valid,
     output logic AXI_ready = 1,
     output logic SCK = 0,
@@ -32,6 +32,9 @@ module SPI_Master(
     output logic ena = 0,//
     output logic [3:0] bit_counter = 15//
     );
+    logic [15:0] buffer;
+    
+    assign buffer = {4'b0000, input_data};
     
     always #10 SCK = ~SCK;
     
@@ -59,7 +62,7 @@ module SPI_Master(
     
     always_ff @(negedge SCK) begin
         if (ena)
-            MOSI <= input_data[bit_counter];
+            MOSI <= buffer[bit_counter];
         else
             MOSI <= 'X; // dla odróżnienia
     end
