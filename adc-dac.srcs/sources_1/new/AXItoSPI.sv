@@ -5,7 +5,7 @@
 // 
 // Create Date: 04/14/2022 01:49:19 AM
 // Design Name: 
-// Module Name: SPI_Master
+// Module Name: AXItoSPI
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,56 +20,55 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module SPI_Master(
-    input logic MISO,
-    input logic [11:0] input_data,
+module AXItoSPI(
     input logic AXI_valid,
-    output logic AXI_ready = 1,
+    output logic AXI_ready,
+    input logic [11:0] digital_in,
+    
     output logic SCK = 0,
     output logic CSn = 1,
     output logic MOSI,
+    input logic MISO,
     
-    output logic ena = 0,//
-    output logic [3:0] bit_counter = 15//
+    output logic counter_en = 0,//
+    output logic [3:0] counter = 15//
     );
     logic [15:0] buffer;
     
-    assign buffer = {4'b0000, input_data};
+    assign buffer = {4'b0000, digital_in};
+    assign AXI_ready = CSn;
     
     always #10 SCK = ~SCK;
     
     always_ff @(posedge SCK) begin
         if (AXI_valid && AXI_ready)
-            ena <= 1;
+            counter_en <= 1;
     end
     
     always_ff @(negedge SCK) begin
-        if (ena)
-            bit_counter <= bit_counter - 1;
+        if (counter_en)
+            counter <= counter - 1;
         else
-            bit_counter <= 15;
+            counter <= 15;
     end
     
     always_ff @(negedge SCK) begin
-        if (ena) begin
+        if (counter_en)
             CSn <= 0;
-            AXI_ready <= 0;
-        end else begin
+        else
             CSn <= 1;
-            AXI_ready <= 1;
-        end
     end
     
     always_ff @(negedge SCK) begin
-        if (ena)
-            MOSI <= buffer[bit_counter];
+        if (counter_en)
+            MOSI <= buffer[counter];
         else
             MOSI <= 'X; // dla odróżnienia
     end
     
     always_ff @(negedge SCK) begin
-        if (bit_counter == 0)
-            ena <= 0;
+        if (counter == 0)
+            counter_en <= 0;
     end
     
 endmodule

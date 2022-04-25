@@ -5,7 +5,7 @@
 // 
 // Create Date: 04/14/2022 01:49:19 AM
 // Design Name: 
-// Module Name: SPI_Slave
+// Module Name: PmodDA2
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,36 +20,34 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module SPI_Slave(
+module PmodDA2(
     input logic SCK,
     input logic CSn,
     input logic MOSI,
     output logic MISO,
-    output logic [11:0] output_data,
-    output logic c_ena = 0,//
-    output logic [3:0] c = 15,//
+    
+    output logic [11:0] analog_out,
+    
+//    output logic counter_en = 0,
+    output logic [3:0] counter = 15,//
     output logic [15:0] buffer//
     );
     
-    //logic c_ena = 0;
-    //logic [15:0] buffer;
-    //assign output_data = MOSI;
-    
     always_ff @(negedge SCK) begin
         if (!CSn)
-            c <= c - 1;
+            counter <= counter - 1;
         else
-            c <= 15;
+            counter <= 15;
     end
 
     always_ff @(posedge SCK) begin
         if (!CSn)
-            buffer[c] <= MOSI;
+            buffer[counter] <= MOSI;
     end
     
     always_ff @(posedge CSn) begin
-        if (c == 15)
-            output_data <= buffer[11:0];
+        if (counter == 15)
+            analog_out <= buffer[11:0];
         else
             buffer <= 16'bXXXXXXXXXXXXXXXX;
     end

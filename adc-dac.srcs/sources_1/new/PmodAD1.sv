@@ -21,25 +21,28 @@
 
 
 module PmodAD1(
+    input logic [11:0] analog_in,
+
     input logic SCK,
     input logic CSn,
     input logic MOSI,
     output logic MISO,
     
-    input logic [11:0] analog_in,
     output logic [3:0] counter = 15,
     output logic [15:0] buffer
     );
     
-    
     assign buffer = {4'b0000, analog_in};
     
     always_ff @(negedge SCK) begin
-        counter <= counter - 1;
+        if (!CSn)
+            counter <= counter - 1;
+        else
+            counter <= 15;
     end
     
     always_ff @(negedge SCK) begin
-        MISO <= buffer[counter];
+        MISO <= buffer[counter-1];
     end
-        
+    
 endmodule
