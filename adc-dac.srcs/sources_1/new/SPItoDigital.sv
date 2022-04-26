@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: Moduł zamieniający szeregowe dane SPI na dane równoległe
 // 
 // Dependencies: 
 // 
@@ -21,19 +21,20 @@
 
 
 module SPItoDigital(
-    output logic SCK = 0,
-    output logic CSn = 1,
-    output logic MOSI,
-    input logic MISO,
+    output logic SCK = 0,  // zegar protokołu SPI                                 
+    output logic CSn = 1, // linia protokołu SPI informująca, czy dane są wysyłane
+    output logic MOSI, // linia danych protokołu SPI w kierunku od master do slave
+    input logic MISO, // linia danych protokołu SPI w kierunku od slave do master
     
-    output logic [11:0] digital_out,
+    output logic [11:0] digital_out, // wyjście cyfrowe
     
-    output logic [4:0] counter = 16,
-    output logic [15:0] buffer
+    output logic [4:0] counter = 16, // licznik koordynujący deserializację danych, ustawiony przerwotnie w stanie IDLE, czyli 16
+    output logic [15:0] buffer // bufor modułu
     );
     
-    always #10 SCK = ~SCK;
+    always #10 SCK = ~SCK; // licznik protokołu SPI
         
+   // proces odpowiadający za nieskończone działanie licznika w zakresie [16 : 0]
     always_ff @(negedge SCK) begin
         if (counter == 0)
             counter <= 16;
@@ -41,15 +42,18 @@ module SPItoDigital(
             counter <= counter - 1;
     end
     
+    // proces odpowiadający za zapisanie do odpowiedniego miejsca w buforze danej z wejścia
     always_ff @(posedge SCK) begin
         buffer[counter] <= MISO;
     end
     
+    // proces odpowiadający za przekazanie na wyjście zawartości bufora
     always_ff @(posedge CSn) begin
         if (CSn)
             digital_out <= buffer[11:0];
     end
     
+    // proces odpowiadający za wysterowanie linią CSn, robi to licznik
     always_ff @(negedge SCK) begin
         if (counter == 16)
             CSn <= 0;
@@ -57,6 +61,7 @@ module SPItoDigital(
             CSn <= 1;
     end
     
+    // proces odpowiadający za wyczyszczenie bufora przed przyjmowaniem kolejnej danej
     always_ff @(negedge CSn) begin
         if (!CSn)
             buffer <= 16'bXXXXXXXXXXXXXXXX;

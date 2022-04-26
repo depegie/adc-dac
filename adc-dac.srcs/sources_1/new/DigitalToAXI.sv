@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 04/21/2022 01:50:25 PM
+// Create Date: 04/26/2022 07:16:21 PM
 // Design Name: 
-// Module Name: DigitalSineGen_tb
+// Module Name: DigitalToAXI
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,13 +20,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module DigitalSineGen_tb #(
-    parameter BITS = 12
+module DigitalToAXI(
+    input [11:0] digital_in,
+    input ACLK,
+    input ARESETn,
+    input TREADY,
+    output TVALID,
+    output [11:0] TDATA
     );
-    logic internal_clk;
-    logic [BITS-1 : 0] digital_out;
-    logic direction;
-    
-    DigitalSineGen #(.BITS(BITS)) test(.clk(internal_clk), .AXI_valid(AXI_valid), .out(digital_out), .direction(direction));
-    
 endmodule

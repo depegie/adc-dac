@@ -46,7 +46,7 @@ module testbench;
 //    logic [15:0] buffer_spconv;
     logic [11:0] digital_out;
     
-    DigitalSineGen #(.BITS(12)) generator(.out(digital_in));
+    DigitalSineGen #(.BITS(12)) generator(.out(digital_in), .AXI_valid(AXI_valid));
     AXItoSPI axi_spi_conv(.AXI_valid(AXI_valid), .AXI_ready(AXI_ready), .SCK(SCK_dac), .CSn(CSn_dac), .MOSI(MOSI_dac), .digital_in(digital_in));
     PmodDA2 dac(.SCK(SCK_dac), .CSn(CSn_dac), .analog_out(analog), .MOSI(MOSI_dac));
     PmodAD1 adc(.SCK(SCK_adc), .CSn(CSn_adc), .MISO(MISO_adc), .analog_in(analog));
@@ -59,7 +59,6 @@ module testbench;
 //    SPItoDigital spi_parallel_conv(.SCK(SCK_adc), .CSn(CSn_adc), .MISO(MISO_adc), .counter(counter_spconv), .buffer(buffer_spconv), .digital_out(digital_out));
     
     initial begin
-        AXI_valid = 1;
     end
     
 endmodule

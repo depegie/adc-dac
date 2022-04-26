@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: Moduł definiujący generator 12-bitowego sygnału cyfrowego sinusoidalnego.
 // 
 // Dependencies: 
 // 
@@ -21,22 +21,23 @@
 
 
 module DigitalSineGen #(
-    parameter BITS = 5,
-    parameter MIN = 0,
-    parameter MAX = 2**BITS - 1)
+    parameter BITS = 12, // parametr określający liczbę bitów sygnału
+    parameter MIN = 0, // minimum sygnału
+    parameter MAX = 2**BITS - 1) // maksimum sygnału
     (
-    output logic direction = 1,
-    output logic [BITS-1 : 0] out
+    output logic direction = 1, // kierunek zliczania - 1 : rosnąco, 0 : malejąco
+    output logic [BITS-1 : 0] out, // wyjście generatora (domyślnie 12-bitowe)
+    output logic AXI_valid = 1, // linia protokołu AXI-Stream informująca, czy dane na wyjściu są ważne
+    output logic clk = 1 // wewnętrzny zegar
     );
    
-    logic clk = 1;
-    //logic direction = 1;
-    logic [BITS-1 : 0] counter = 1;
+    logic [BITS-1 : 0] counter = 1; // licznik, który oznacza tyle, co wartość na wyjściu
     
-    assign out = counter;
+    assign out = counter; // przekierowanie licznika na wyjście generatora
     
-    always #170 clk = ~clk;
+    always #170 clk = ~clk; // przemiatanie zegara dostosowane do szybkości przetworników
     
+    // proces odpowiadający za zmianę wielkości na wyjściu generatora
     always_ff @(posedge clk) begin
         if (direction)
             counter <= counter + 1;
@@ -44,6 +45,9 @@ module DigitalSineGen #(
             counter <= counter - 1;     
     end
     
+    // proces odpowiadający za decyzję, czy licznik ma rosnąć, czy maleć. W środku trwania
+    // skrajnej wartości następuje zmiana kireunku licznika. tym sposobem wartość licznika
+    // znajduje się w przedziale [MIN ; MAX], czyli domyślnie [0 ; 4095]
     always_ff @(negedge clk) begin
         if (counter == MIN || counter == MAX)
             direction <= ~direction;
