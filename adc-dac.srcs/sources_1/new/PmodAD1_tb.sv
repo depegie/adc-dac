@@ -21,22 +21,24 @@
 
 
 module PmodAD1_tb;
-    logic SCK_tb;
-    logic CSn_tb;
-    logic MOSI_tb;
-    logic MISO_tb;
-    
-    logic [11:0] analog_in_tb;
-    logic [3:0] counter_tb;
-    
-    PmodAD1 adc(.SCK(SCK_tb), .CSn(CSn_tb), .MOSI(MOSI_tb), .MISO(MISO_tb), .analog_in(analog_in_tb), .counter(counter_tb));
-    
-    always #10 SCK_tb = ~SCK_tb;
-    
-    initial begin
-        SCK_tb = 0;
-        CSn_tb = 0;
-        analog_in_tb = 12'b110010101011;
-    end
+    logic SCK_dac;
+    logic CSn_dac;
+    logic MOSI_dac;
 
+    logic SCK_adc = 0;
+    logic CSn_adc = 1;
+    logic MOSI_adc;
+    logic MISO_adc;
+    
+    logic [11:0] analog;
+    logic [3:0] counter;
+    
+    DigitalSineGen #(.BITS(12)) generator(.out(digital_in));
+    SPI_Serializer spi_serial(.SCK(SCK_dac), .CSn(CSn_dac), .MOSI(MOSI_dac), .digital_in(digital_in));
+    PmodDA2 dac(.SCK(SCK_dac), .CSn(CSn_dac), .analog_out(analog), .MOSI(MOSI_dac), .MISO());
+    PmodAD1 adc(.SCK(SCK_adc), .CSn(CSn_adc), .MOSI(MOSI_adc), .MISO(MISO_adc), .analog_in(analog), .counter(counter));
+    
+    always #10 SCK_adc = ~SCK_adc;
+
+    
 endmodule

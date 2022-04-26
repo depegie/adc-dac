@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 04/11/2022 01:44:54 AM
+// Create Date: 04/26/2022 11:18:41 PM
 // Design Name: 
-// Module Name: dut
+// Module Name: dut_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,10 +20,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module dut(
-    input logic [11:0] digital_in,
-    input logic [11:0] digital_out
-    );
+module dut_tb;
+    logic [11:0] digital_in;
     
     logic SPI_SCK_dac;
     logic SPI_CSn_dac;
@@ -35,6 +33,9 @@ module dut(
     logic SPI_CSn_adc;
     logic SPI_MISO_adc;
     
+    logic [11:0] digital_out;
+
+    DigitalSineGen #(.BITS(12)) test(.out(digital_in));
     SPI_Serializer spi_serial(.SPI_SCK(SPI_SCK_dac), .SPI_CSn(SPI_CSn_dac), .SPI_MOSI(SPI_MOSI_dac), .digital_in(digital_in));
     PmodDA2 dac(.SPI_SCK(SPI_SCK_dac), .SPI_CSn(SPI_CSn_dac), .analog_out(analog), .SPI_MOSI(SPI_MOSI_dac));
     PmodAD1 adc(.SPI_SCK(SPI_SCK_adc), .SPI_CSn(SPI_CSn_adc), .SPI_MISO(SPI_MISO_adc), .analog_in(analog));

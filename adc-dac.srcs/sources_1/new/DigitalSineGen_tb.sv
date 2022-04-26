@@ -23,10 +23,10 @@
 module DigitalSineGen_tb #(
     parameter BITS = 12
     );
-    logic internal_clk;
+    logic clk;
     logic [BITS-1 : 0] digital_out;
     logic direction;
     
-    DigitalSineGen #(.BITS(BITS)) test(.clk(internal_clk), .AXI_valid(AXI_valid), .out(digital_out), .direction(direction));
+    DigitalSineGen #(.BITS(BITS)) test(.CLK(clk), .out(digital_out), .direction(direction));
     
 endmodule

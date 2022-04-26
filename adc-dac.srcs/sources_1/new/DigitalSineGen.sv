@@ -27,18 +27,17 @@ module DigitalSineGen #(
     (
     output logic direction = 1, // kierunek zliczania - 1 : rosnąco, 0 : malejąco
     output logic [BITS-1 : 0] out, // wyjście generatora (domyślnie 12-bitowe)
-    output logic AXI_valid = 1, // linia protokołu AXI-Stream informująca, czy dane na wyjściu są ważne
-    output logic clk = 1 // wewnętrzny zegar
+    output logic CLK = 1 // wewnętrzny zegar
     );
    
     logic [BITS-1 : 0] counter = 1; // licznik, który oznacza tyle, co wartość na wyjściu
     
     assign out = counter; // przekierowanie licznika na wyjście generatora
     
-    always #170 clk = ~clk; // przemiatanie zegara dostosowane do szybkości przetworników
+    always #425 CLK = ~CLK; // przemiatanie zegara dostosowane do szybkości przetworników
     
     // proces odpowiadający za zmianę wielkości na wyjściu generatora
-    always_ff @(posedge clk) begin
+    always_ff @(posedge CLK) begin
         if (direction)
             counter <= counter + 1;
         else
@@ -48,7 +47,7 @@ module DigitalSineGen #(
     // proces odpowiadający za decyzję, czy licznik ma rosnąć, czy maleć. W środku trwania
     // skrajnej wartości następuje zmiana kireunku licznika. tym sposobem wartość licznika
     // znajduje się w przedziale [MIN ; MAX], czyli domyślnie [0 ; 4095]
-    always_ff @(negedge clk) begin
+    always_ff @(negedge CLK) begin
         if (counter == MIN || counter == MAX)
             direction <= ~direction;
         else

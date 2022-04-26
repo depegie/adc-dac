@@ -5,7 +5,7 @@
 // 
 // Create Date: 04/25/2022 10:01:52 PM
 // Design Name: 
-// Module Name: AXItoSPI_tb
+// Module Name: SPI_Serializer_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,19 +20,17 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module AXItoSPI_tb;
-    logic AXI_valid;
-    logic AXI_ready;
+module SPI_Serializer_tb;
     logic [11:0] digital_in;
-    logic SCK;
-    logic CSn;
-    logic MOSI;
-    logic MISO;
+    logic SPI_SCK;
+    logic SPI_CSn;
+    logic SPI_MOSI;
+    logic SPI_MISO;
     
     logic counter_en;
     logic [3:0] counter;
+    logic [15:0] buffer;
 
-    DigitalSineGen #(.BITS(12)) generator(.out(digital_in), .AXI_valid(AXI_valid));
-    AXItoSPI axi_spi_conv(.AXI_valid(AXI_valid), .AXI_ready(AXI_ready), .SCK(SCK), .CSn(CSn), .MOSI(MOSI), .digital_in(digital_in), .counter_en(counter_en), .counter(counter));
-
+    DigitalSineGen #(.BITS(12)) generator(.out(digital_in));
+    SPI_Serializer spi_serial(.SPI_SCK(SPI_SCK), .SPI_CSn(SPI_CSn), .SPI_MOSI(SPI_MOSI), .digital_in(digital_in), .counter_en(counter_en), .counter(counter), .buffer(buffer));
 endmodule

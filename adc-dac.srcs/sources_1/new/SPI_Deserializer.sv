@@ -5,7 +5,7 @@
 // 
 // Create Date: 04/23/2022 02:50:22 PM
 // Design Name: 
-// Module Name: SPItoDigital
+// Module Name: SPI_Deserializer
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,11 +20,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module SPItoDigital(
-    output logic SCK = 0,  // zegar protokołu SPI                                 
-    output logic CSn = 1, // linia protokołu SPI informująca, czy dane są wysyłane
-    output logic MOSI, // linia danych protokołu SPI w kierunku od master do slave
-    input logic MISO, // linia danych protokołu SPI w kierunku od slave do master
+module SPI_Deserializer(
+    output logic SPI_SCK = 0,  // zegar protokołu SPI                                 
+    output logic SPI_CSn = 1, // linia protokołu SPI informująca, czy dane są wysyłane
+    output logic SPI_MOSI, // linia danych protokołu SPI w kierunku od master do slave
+    input logic SPI_MISO, // linia danych protokołu SPI w kierunku od slave do master
     
     output logic [11:0] digital_out, // wyjście cyfrowe
     
@@ -32,10 +32,10 @@ module SPItoDigital(
     output logic [15:0] buffer // bufor modułu
     );
     
-    always #10 SCK = ~SCK; // licznik protokołu SPI
+    always #25 SPI_SCK = ~SPI_SCK; // licznik protokołu SPI
         
    // proces odpowiadający za nieskończone działanie licznika w zakresie [16 : 0]
-    always_ff @(negedge SCK) begin
+    always_ff @(negedge SPI_SCK) begin
         if (counter == 0)
             counter <= 16;
         else
@@ -43,27 +43,27 @@ module SPItoDigital(
     end
     
     // proces odpowiadający za zapisanie do odpowiedniego miejsca w buforze danej z wejścia
-    always_ff @(posedge SCK) begin
-        buffer[counter] <= MISO;
+    always_ff @(posedge SPI_SCK) begin
+        buffer[counter] <= SPI_MISO;
     end
     
     // proces odpowiadający za przekazanie na wyjście zawartości bufora
-    always_ff @(posedge CSn) begin
-        if (CSn)
+    always_ff @(posedge SPI_CSn) begin
+        if (SPI_CSn)
             digital_out <= buffer[11:0];
     end
     
     // proces odpowiadający za wysterowanie linią CSn, robi to licznik
-    always_ff @(negedge SCK) begin
+    always_ff @(negedge SPI_SCK) begin
         if (counter == 16)
-            CSn <= 0;
+            SPI_CSn <= 0;
         else if (counter == 0)
-            CSn <= 1;
+            SPI_CSn <= 1;
     end
     
     // proces odpowiadający za wyczyszczenie bufora przed przyjmowaniem kolejnej danej
-    always_ff @(negedge CSn) begin
-        if (!CSn)
+    always_ff @(negedge SPI_CSn) begin
+        if (!SPI_CSn)
             buffer <= 16'bXXXXXXXXXXXXXXXX;
     end
     
