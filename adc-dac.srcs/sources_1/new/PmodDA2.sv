@@ -22,7 +22,7 @@
 
 module PmodDA2(
     input logic SPI_SCK, // zegar protokołu SPI
-    input logic SPI_CSn, // linia protokołu SPI informująca, czy dane są wysyłane, stanowi jeddocześnie włącznik licznika
+    input logic SPI_CSn, // linia protokołu SPI informująca, czy dane są wysyłane, stanowi jednocześnie włącznik licznika
     input logic SPI_MOSI, // linia danych protokołu SPI w kierunku od master do slave
     output logic SPI_MISO, // linia danych protokołu SPI w kierunku od slave do master
     
