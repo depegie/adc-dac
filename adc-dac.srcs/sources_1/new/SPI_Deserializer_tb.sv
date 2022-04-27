@@ -37,6 +37,7 @@ module SPI_Deserializer_tb;
     logic SPI_SCK_adc;
     logic SPI_CSn_adc;
     logic SPI_MISO_adc;
+    logic SPI_MOSI_adc;
     logic [3:0] counter_adc;
     logic [15:0] buffer_adc;
     
