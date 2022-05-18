@@ -22,13 +22,13 @@
 
 module DigitalSineGen #(
     parameter BITS = 12, // parametr określający liczbę bitów sygnału
-    parameter DEFAULT_DATA_VAL = 0, // domyślna wartość wyjścia
-    parameter DEFAULT_DIRECTION = 1, // domyślny kierunek zliczania
-    parameter MIN_OUTPUT_VAL = 0, // minimum sygnału
-    parameter MAX_OUTPUT_VAL = 2**BITS - 1) // maksimum sygnału
+    parameter INITIAL_DATA_VAL = 2**BITS/2, // początkowa wartość wyjścia
+    parameter INITIAL_DIRECTION = 1, // początkowy kierunek zliczania
+    parameter MIN_DATA_VAL = 0, // minimum sygnału
+    parameter MAX_DATA_VAL = 2**BITS - 1) // maksimum sygnału
     (
-    output logic direction = DEFAULT_DIRECTION, // kierunek zliczania - 1 : rosnąco, 0 : malejąco
-    output logic [BITS-1 : 0] data = DEFAULT_DATA_VAL, // wyjście generatora (domyślnie 12-bitowe)
+    output logic direction = INITIAL_DIRECTION, // kierunek zliczania - 1:rosnąco, 0:malejąco
+    output logic [BITS-1 : 0] data = INITIAL_DATA_VAL, // wyjście generatora (domyślnie 12-bitowe)
     input logic Clk, // wejście zegara
     input logic Rst_n // wejście resetu
     );
@@ -36,16 +36,13 @@ module DigitalSineGen #(
     // proces odpowiadający za zmianę wielkości na wyjściu generatora
     always_ff @(posedge Clk) begin
         if (!Rst_n) begin
-            data <= DEFAULT_DATA_VAL;
+            data <= INITIAL_DATA_VAL;
         end
         else if (direction) begin
             data <= data + 1;
         end
         else if (!direction) begin
             data <= data - 1;
-        end
-        else begin
-            data <= data;
         end
     end
     
@@ -55,12 +52,12 @@ module DigitalSineGen #(
     // [MIN_OUTPUT_VAL ; MAX_OUTPUT_VAL], czyli domyślnie [0 ; 4095]
     always_ff @(posedge Clk) begin
         if (!Rst_n) begin
-            direction <= DEFAULT_DIRECTION;
+            direction <= INITIAL_DIRECTION;
         end
-        else if (data == MAX_OUTPUT_VAL-1) begin
+        else if (data == MAX_DATA_VAL-1) begin
             direction <= 0;
         end
-        else if (data == MIN_OUTPUT_VAL+1) begin
+        else if (data == MIN_DATA_VAL+1) begin
             direction <= 1;
         end
         else begin

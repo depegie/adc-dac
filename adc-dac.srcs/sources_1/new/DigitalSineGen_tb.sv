@@ -25,13 +25,13 @@ module DigitalSineGen_tb #(
     
     logic Clk_tb;
     logic Rst_n_tb;
-    logic [BITS-1 : 0] out_tb;
+    logic [BITS-1 : 0] data_tb;
     logic direction_tb;
     
     DigitalSineGen #(.BITS(BITS)) dut(
         .Clk(Clk_tb),
         .Rst_n(Rst_n_tb),
-        .out(out_tb),
+        .data(data_tb),
         .direction(direction_tb)
     );
     
