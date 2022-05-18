@@ -21,12 +21,28 @@
 
 
 module DigitalSineGen_tb #(
-    parameter BITS = 12
-    );
-    logic clk;
-    logic [BITS-1 : 0] digital_out;
-    logic direction;
+    parameter BITS = 12);
     
-    DigitalSineGen #(.BITS(BITS)) test(.CLK(clk), .out(digital_out), .direction(direction));
+    logic Clk_tb;
+    logic Rst_n_tb;
+    logic [BITS-1 : 0] out_tb;
+    logic direction_tb;
+    
+    DigitalSineGen #(.BITS(BITS)) dut(
+        .Clk(Clk_tb),
+        .Rst_n(Rst_n_tb),
+        .out(out_tb),
+        .direction(direction_tb)
+    );
+    
+    always #1 Clk_tb = ~Clk_tb;
+    
+    initial begin
+        Clk_tb = 1;
+        Rst_n_tb = 1;
+        
+        #20 Rst_n_tb = 0;
+        #30 Rst_n_tb = 1;
+    end
     
 endmodule

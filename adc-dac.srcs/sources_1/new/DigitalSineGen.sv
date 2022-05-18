@@ -22,36 +22,50 @@
 
 module DigitalSineGen #(
     parameter BITS = 12, // parametr określający liczbę bitów sygnału
-    parameter MIN = 0, // minimum sygnału
-    parameter MAX = 2**BITS - 1) // maksimum sygnału
+    parameter DEFAULT_DATA_VAL = 0, // domyślna wartość wyjścia
+    parameter DEFAULT_DIRECTION = 1, // domyślny kierunek zliczania
+    parameter MIN_OUTPUT_VAL = 0, // minimum sygnału
+    parameter MAX_OUTPUT_VAL = 2**BITS - 1) // maksimum sygnału
     (
-    output logic direction = 1, // kierunek zliczania - 1 : rosnąco, 0 : malejąco
-    output logic [BITS-1 : 0] out, // wyjście generatora (domyślnie 12-bitowe)
-    output logic CLK = 1 // wewnętrzny zegar
+    output logic direction = DEFAULT_DIRECTION, // kierunek zliczania - 1 : rosnąco, 0 : malejąco
+    output logic [BITS-1 : 0] data = DEFAULT_DATA_VAL, // wyjście generatora (domyślnie 12-bitowe)
+    input logic Clk, // wejście zegara
+    input logic Rst_n // wejście resetu
     );
-   
-    logic [BITS-1 : 0] counter = 1; // licznik, który oznacza tyle, co wartość na wyjściu
-    
-    assign out = counter; // przekierowanie licznika na wyjście generatora
-    
-    always #425 CLK = ~CLK; // przemiatanie zegara dostosowane do szybkości przetworników
     
     // proces odpowiadający za zmianę wielkości na wyjściu generatora
-    always_ff @(posedge CLK) begin
-        if (direction)
-            counter <= counter + 1;
-        else
-            counter <= counter - 1;     
+    always_ff @(posedge Clk) begin
+        if (!Rst_n) begin
+            data <= DEFAULT_DATA_VAL;
+        end
+        else if (direction) begin
+            data <= data + 1;
+        end
+        else if (!direction) begin
+            data <= data - 1;
+        end
+        else begin
+            data <= data;
+        end
     end
     
-    // proces odpowiadający za decyzję, czy licznik ma rosnąć, czy maleć. W środku trwania
-    // skrajnej wartości następuje zmiana kireunku licznika. tym sposobem wartość licznika
-    // znajduje się w przedziale [MIN ; MAX], czyli domyślnie [0 ; 4095]
-    always_ff @(negedge CLK) begin
-        if (counter == MIN || counter == MAX)
-            direction <= ~direction;
-        else
+    // proces odpowiadający za decyzję, czy licznik ma rosnąć, czy maleć. Przed
+    // rozpoczęciem skrajnej wartości następuje zmiana kireunku licznika. tym
+    // sposobem wartość licznika znajduje się w przedziale 
+    // [MIN_OUTPUT_VAL ; MAX_OUTPUT_VAL], czyli domyślnie [0 ; 4095]
+    always_ff @(posedge Clk) begin
+        if (!Rst_n) begin
+            direction <= DEFAULT_DIRECTION;
+        end
+        else if (data == MAX_OUTPUT_VAL-1) begin
+            direction <= 0;
+        end
+        else if (data == MIN_OUTPUT_VAL+1) begin
+            direction <= 1;
+        end
+        else begin
             direction <= direction;
+        end
     end
     
 endmodule
