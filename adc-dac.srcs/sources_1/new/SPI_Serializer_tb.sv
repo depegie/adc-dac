@@ -20,17 +20,45 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module SPI_Serializer_tb;
-    logic [11:0] digital_in;
-    logic SPI_SCK;
-    logic SPI_CSn;
-    logic SPI_MOSI;
-    logic SPI_MISO;
+module SPI_Serializer_tb #(
+    parameter BITS = 12);
     
-    logic counter_en;
-    logic [3:0] counter;
-    logic [15:0] buffer;
+    logic Clk_gen_tb;
+    logic Rst_n_tb;
 
-    DigitalSineGen #(.BITS(12)) generator(.out(digital_in));
-    SPI_Serializer spi_serial(.SPI_SCK(SPI_SCK), .SPI_CSn(SPI_CSn), .SPI_MOSI(SPI_MOSI), .digital_in(digital_in), .counter_en(counter_en), .counter(counter), .buffer(buffer));
+    logic [BITS-1 : 0] data_tb;
+    logic SCLK;
+    logic SYNCn;
+    logic DIN;
+ 
+    logic counter_ena;
+    logic [3:0] counter;
+    logic [3:0] help_counter;
+    logic [15:0] buffer;
+    
+//    logic [11:0] analog_out;
+
+        DigitalSineGen #(.BITS(BITS)) dut(
+        .Clk(Clk_gen_tb),
+        .Rst_n(Rst_n_tb),
+        .data(data_tb)
+    );
+    SPI_Serializer spi_serial(
+        .Rst_n(Rst_n_tb),
+        .SCLK(SCLK),
+        .SYNCn(SYNCn),
+        .DIN(DIN),
+        .digital_in(data_tb),
+        .counter_ena(counter_ena),
+        .counter(counter),
+//        .help_counter(help_counter)
+        .buffer(buffer)
+    );
+    
+    always #1000 Clk_gen_tb = ~Clk_gen_tb;
+    
+    initial begin
+        Clk_gen_tb = 0;
+        Rst_n_tb = 1;
+    end
 endmodule

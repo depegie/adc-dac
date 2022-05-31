@@ -1,4 +1,4 @@
-`timescale 1ns / 1ns
+`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -20,60 +20,85 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module SPI_Serializer(
-    input logic [11:0] digital_in, // 12-bitowe wejście dla sygnału cyfrowego
-    
-    output logic SPI_SCK = 0,  // zegar protokołu SPI
-    output logic SPI_CSn = 1, // linia protokołu SPI informująca, czy dane są wysyłane
-    output logic SPI_MOSI, // linia danych protokołu SPI w kierunku od master do slave
-    input logic SPI_MISO, // linia danych protokołu SPI w kierunku od slave do master
-    
-    output logic counter_en = 0, // włącznik wewnętrznego licznika
-    output logic [3:0] counter = 15, // licznik koordynujący przepływ szeregowej 16-bitowej danej
-    output logic [15:0] buffer // bufor modułu
+module SPI_Serializer #(
+    parameter INITIAL_SCLK = 1'b0,
+    parameter INITIAL_SYNCN = 1'b1,
+    parameter INITIAL_DIN = 1'b0,
+    parameter INITIAL_COUNTER_ENA = 1'b1,
+    parameter INITIAL_COUNTER = 15,
+    parameter INITIAL_BUFFER = 16'b0000_0000_0000_0000)
+    (
+    output logic        SCLK        = INITIAL_SCLK,
+    output logic        SYNCn       = INITIAL_SYNCN,
+    output logic        DIN         = INITIAL_DIN,
+    input logic         Clk,
+    input logic         Rst_n,
+    input logic [11:0]  digital_in,
+//////////////////////////////////////////////////////////////////////////////////
+    output logic        counter_ena = INITIAL_COUNTER_ENA,
+    output logic [3:0]  counter = INITIAL_COUNTER,
+    output logic [15:0] buffer = INITIAL_BUFFER
     );
     
-    assign buffer = {4'b0000, digital_in}; // zdefiniowanie bufora, 4 najstarsze bity wynikają z dokumentacji przetwaornika
-    
-    always #25 SPI_SCK = ~SPI_SCK; // licznik protokołu SPI
-    
-    // moduł odpowiadający za rozpoczęcie czytanie danych z wejścia. W przypadku spełnienia
-    // warunku następuje włączenie licznika koordunującego szeregową transmisję danych
-    always_ff @(posedge SPI_SCK) begin
-        if (SPI_CSn)
-            counter_en <= 1;
-    end
-    
-    // moduł odpowiadający za działanie i reset licznika. Licznik pozostaje w stanie 15,
-    // gdy jest wyłączony
-    always_ff @(negedge SPI_SCK) begin
-        if (counter_en)
+    always #17 SCLK = ~SCLK;
+
+    always_ff @(posedge SCLK) begin
+        if (!Rst_n || counter == 0) begin
+            counter <= INITIAL_COUNTER;
+        end
+        else if (counter_ena) begin
             counter <= counter - 1;
-        else
-            counter <= 15;
+        end
+        else begin
+            counter <= counter;
+        end
     end
     
-     // proces odpowiadający za wysterowanie linii CSn. Dane są wysyłane, gdy działa licznik.
-    always_ff @(negedge SPI_SCK) begin
-        if (counter_en)
-            SPI_CSn <= 0;
-        else
-            SPI_CSn <= 1;
+    always_ff @(posedge SCLK) begin
+        if (!Rst_n) begin
+            counter_ena <= INITIAL_COUNTER_ENA;
+        end
+        else if (counter == 0) begin
+            counter_ena <= 0;
+        end
+        else if (counter == 15) begin
+            counter_ena <= 1;
+        end
+        else begin
+            counter_ena <= counter_ena;
+        end
     end
     
-    // proces odpowiadający za wysterowanie linii danych MOSI. Na linię MOSI wystawiany jest
-    // bit z bufora, na który aktualnie wskazuje licznik
-    always_ff @(negedge SPI_SCK) begin
-        if (counter_en)
-            SPI_MOSI <= buffer[counter];
-        else
-            SPI_MOSI <= 'X; // dla odróżnienia
+    always_ff @(posedge SCLK) begin
+        if (!Rst_n) begin
+            SYNCn <= INITIAL_SYNCN;
+        end
+        else if (counter == 15) begin
+            SYNCn <= ~SYNCn;
+        end
+        else begin
+            SYNCn <= SYNCn;
+        end
     end
     
-    // proces odpowiadający za wyłączenie licznika.
-    always_ff @(negedge SPI_SCK) begin
-        if (counter == 0)
-            counter_en <= 0;
+    always_ff @(posedge SCLK) begin
+        if (!Rst_n) begin
+            DIN <= INITIAL_DIN;
+        end
+        else begin
+            DIN <= buffer[counter];
+        end
     end
     
+    always_ff @(posedge SCLK) begin
+        if (!Rst_n) begin
+            buffer <= INITIAL_BUFFER;
+        end
+        else if (SYNCn) begin
+            buffer <= {4'b0000, digital_in};
+        end
+        else begin
+            buffer <= buffer;
+        end
+    end
 endmodule

@@ -38,7 +38,7 @@ module DigitalSineGen_tb #(
     always #1 Clk_tb = ~Clk_tb;
     
     initial begin
-        Clk_tb = 1;
+        Clk_tb = 0;
         Rst_n_tb = 1;
         
         #20 Rst_n_tb = 0;
