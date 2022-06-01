@@ -42,7 +42,6 @@ adc-dac.hw/
 adc-dac.ip_user_files/
 adc-dac.runs/
 adc-dac.sim/
-adc-dac.srcs/sources_1/ip/
 
 ###### for Xilinx Vivado|ISE
 .Xil/
