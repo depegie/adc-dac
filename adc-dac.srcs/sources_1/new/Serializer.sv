@@ -21,25 +21,25 @@
 
 
 module SPI_Serializer #(
-    parameter INITIAL_SYNCN = 1'b1,
-    parameter INITIAL_DIN = 1'b0,
-    parameter INITIAL_COUNTER_ENA = 1'b1,
-    parameter INITIAL_COUNTER = 15,
-    parameter INITIAL_BUFFER = 16'b0000_0000_0000_0000)
+    parameter NUM_OF_BITS           = 12,
+    parameter INITIAL_SYNCN         = 1'b1,
+    parameter INITIAL_DIN           = 1'b0,
+    parameter INITIAL_COUNTER_ENA   = 1'b1,
+    parameter INITIAL_COUNTER       = 15,
+    parameter INITIAL_BUFFER        = 16'b0000_0000_0000_0000)
     (
-    output logic        SCLK,
-    output logic        SYNCn       = INITIAL_SYNCN,
-    output logic        DIN         = INITIAL_DIN,
-    input logic         Clk,
-    input logic         Rst_n,
-    input logic [11:0]  digital_in,
-//////////////////////////////////////////////////////////////////////////////////
-    output logic        counter_ena = INITIAL_COUNTER_ENA,
-    output logic [3:0]  counter = INITIAL_COUNTER,
-    output logic [15:0] buffer = INITIAL_BUFFER
+    input logic                     Clk,
+    input logic                     Rst_n,
+    input logic [NUM_OF_BITS-1 : 0] DATAIN,
+    output logic                    SCLK,
+    output logic                    SYNCn       = INITIAL_SYNCN,
+    output logic                    DIN         = INITIAL_DIN
     );
+    logic                           counter_ena = INITIAL_COUNTER_ENA;
+    logic [3:0]                     counter     = INITIAL_COUNTER;
+    logic [NUM_OF_BITS+3 : 0]       buffer      = INITIAL_BUFFER;
     
-    clk_wiz_0 freq_33M_to_30M(.clk33M(Clk), .clk30M(SCLK), .resetn(Rst_n));
+    Clk20MHz freq_20MHz(.clk_100MHz(Clk), .clk_20MHz(SCLK));
 
     always_ff @(posedge SCLK) begin
         if (!Rst_n || counter == 0) begin
@@ -94,7 +94,7 @@ module SPI_Serializer #(
             buffer <= INITIAL_BUFFER;
         end
         else if (SYNCn) begin
-            buffer <= {4'b0000, digital_in};
+            buffer <= {4'b0000, DATAIN};
         end
         else begin
             buffer <= buffer;

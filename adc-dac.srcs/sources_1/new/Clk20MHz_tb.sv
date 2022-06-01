@@ -23,16 +23,13 @@
 module clk_wiz_0_tb;
     logic Clk_tb;
     logic SCLK_tb;
-    logic locked_tb;
-    logic resetn_tb;
     
-    clk_wiz_0 dut(.clk_in1(Clk_tb), .clk_out1(SCLK_tb), .locked(locked_tb), .resetn(resetn_tb));
+    Clk20MHz dut(.clk_100MHz(Clk_tb), .clk_20MHz(SCLK_tb));
     
-    always #15 Clk_tb = ~Clk_tb;
+    always #5 Clk_tb = ~Clk_tb;
     
     initial begin
         Clk_tb = 0;
-        resetn_tb = 1;
     end
     
 endmodule
