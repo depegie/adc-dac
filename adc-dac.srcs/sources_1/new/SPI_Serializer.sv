@@ -21,14 +21,13 @@
 
 
 module SPI_Serializer #(
-    parameter INITIAL_SCLK = 1'b0,
     parameter INITIAL_SYNCN = 1'b1,
     parameter INITIAL_DIN = 1'b0,
     parameter INITIAL_COUNTER_ENA = 1'b1,
     parameter INITIAL_COUNTER = 15,
     parameter INITIAL_BUFFER = 16'b0000_0000_0000_0000)
     (
-    output logic        SCLK        = INITIAL_SCLK,
+    output logic        SCLK,
     output logic        SYNCn       = INITIAL_SYNCN,
     output logic        DIN         = INITIAL_DIN,
     input logic         Clk,
@@ -40,7 +39,7 @@ module SPI_Serializer #(
     output logic [15:0] buffer = INITIAL_BUFFER
     );
     
-    always #17 SCLK = ~SCLK;
+    clk_wiz_0 freq_33M_to_30M(.clk33M(Clk), .clk30M(SCLK), .resetn(Rst_n));
 
     always_ff @(posedge SCLK) begin
         if (!Rst_n || counter == 0) begin

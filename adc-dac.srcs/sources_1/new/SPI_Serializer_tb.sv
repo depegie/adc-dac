@@ -24,6 +24,7 @@ module SPI_Serializer_tb #(
     parameter BITS = 12);
     
     logic Clk_gen_tb;
+    logic Clk_tb;
     logic Rst_n_tb;
 
     logic [BITS-1 : 0] data_tb;
@@ -37,13 +38,9 @@ module SPI_Serializer_tb #(
     logic [15:0] buffer;
     
 //    logic [11:0] analog_out;
-
-        DigitalSineGen #(.BITS(BITS)) dut(
-        .Clk(Clk_gen_tb),
-        .Rst_n(Rst_n_tb),
-        .data(data_tb)
-    );
+    
     SPI_Serializer spi_serial(
+        .Clk(Clk_tb),
         .Rst_n(Rst_n_tb),
         .SCLK(SCLK),
         .SYNCn(SYNCn),
@@ -56,9 +53,12 @@ module SPI_Serializer_tb #(
     );
     
     always #1000 Clk_gen_tb = ~Clk_gen_tb;
+    always #15 Clk_tb = ~Clk_tb;
     
     initial begin
         Clk_gen_tb = 0;
+        Clk_tb = 0;
         Rst_n_tb = 1;
+        data_tb = 12'b1100_1001_0011;
     end
 endmodule
