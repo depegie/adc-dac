@@ -5,7 +5,7 @@
 // 
 // Create Date: 04/25/2022 10:01:52 PM
 // Design Name: 
-// Module Name: SPI_Serializer_tb
+// Module Name: Serializer_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module SPI_Serializer_tb #(
+module Serializer_tb #(
     parameter NUM_OF_BITS = 12);
 
     logic Clk_tb;
@@ -30,20 +30,20 @@ module SPI_Serializer_tb #(
     logic SYNCn_tb;
     logic DIN_tb;
     
-//    logic counter_ena;
-//    logic [3:0] counter;
-//    logic [NUM_OF_BITS+3:0] buffer;
+//    logic counter_ena_tb;
+//    logic [3:0] counter_tb;
+//    logic [NUM_OF_BITS+3:0] buffer_tb;
     
-    SPI_Serializer spi_serial(
+    Serializer serial(
         .Clk(Clk_tb),
         .Rst_n(Rst_n_tb),
         .DATAIN(DATAIN_tb),
         .SCLK(SCLK_tb),
         .SYNCn(SYNCn_tb),
         .DIN(DIN_tb)
-//        .counter_ena(counter_ena),
-//        .counter(counter),
-//        .buffer(buffer)
+//        .counter_ena(counter_ena_tb),
+//        .counter(counter_tb),
+//        .buffer(buffer_tb)
     );
     
     always #5 Clk_tb = ~Clk_tb;
@@ -52,5 +52,7 @@ module SPI_Serializer_tb #(
         Clk_tb = 0;
         Rst_n_tb = 1;
         DATAIN_tb = 12'b1100_1001_0011;
+        #5000 DATAIN_tb = 12'b1000_1001_0101;
+        #5000 DATAIN_tb = 12'b0101_1000_1001;
     end
 endmodule

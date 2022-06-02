@@ -21,18 +21,27 @@
 
 
 module PmodDA2_tb;
-    logic SPI_SCK;
-    logic SPI_CSn;
-    logic SPI_MOSI;
-    logic SPI_MISO;
-    logic [11:0] digital_in;
-    logic [11:0] analog_out;
+    logic Clk_tb;
+    logic Rst_n_tb;
+
+    logic SCLK_tb;
+    logic SYNCn_tb;
+    logic DIN_tb;
+    logic [11:0] DATAIN_tb;
+    logic [11:0] VOUT_tb;
     
-    logic [3:0] counter;
-    logic [15:0] buffer;
+//    DigitalSineGen #(.BITS(12)) generator(.out(digital_in));
+    Serializer serial(.Clk(Clk_tb), .Rst_n(Rst_n_tb), .DATAIN(DATAIN_tb), .SCLK(SCLK_tb), .SYNCn(SYNCn_tb), .DIN(DIN_tb));
+    PmodDA2 dac(.SCLK(SCLK_tb), .SYNCn(SYNCn_tb), .DIN(DIN_tb), .VOUT(VOUT_tb));
     
-    DigitalSineGen #(.BITS(12)) generator(.out(digital_in));
-    SPI_Serializer spi_serial(.SPI_SCK(SPI_SCK), .SPI_CSn(SPI_CSn), .SPI_MOSI(SPI_MOSI), .digital_in(digital_in));
-    PmodDA2 dac(.SPI_SCK(SPI_SCK), .SPI_CSn(SPI_CSn), .analog_out(analog_out), .SPI_MOSI(SPI_MOSI), .counter(counter), .buffer(buffer));
+    always #5 Clk_tb = ~Clk_tb;
+    
+    initial begin
+        Clk_tb = 0;
+        Rst_n_tb = 1;
+        DATAIN_tb = 12'b1100_1001_0011;
+        #5000 DATAIN_tb = 12'b1000_1001_0101;
+        #5000 DATAIN_tb = 12'b0101_1000_1001;
+    end
     
 endmodule

@@ -5,11 +5,11 @@
 // 
 // Create Date: 04/14/2022 01:49:19 AM
 // Design Name: 
-// Module Name: SPI_Serializer
+// Module Name: Serializer
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: Moduł definiujący konwerter wejścia równoległego na wyjście szeregowe SPI
+// Description: Moduł definiujący konwerter wejścia równoległego na wyjście szeregowe
 // 
 // Dependencies: 
 // 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module SPI_Serializer #(
+module Serializer #(
     parameter NUM_OF_BITS           = 12,
     parameter INITIAL_SYNCN         = 1'b1,
     parameter INITIAL_DIN           = 1'b0,
