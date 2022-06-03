@@ -32,17 +32,17 @@ module Serializer #(
     input logic                     Rst_n,
     input logic [NUM_OF_BITS-1 : 0] DATAIN,
     output logic                    SCLK,
-    output logic                    SYNCn       = INITIAL_SYNCN,
-    output logic                    DIN         = INITIAL_DIN
+    output logic                    SYNCn   = INITIAL_SYNCN,
+    output logic                    DIN     = INITIAL_DIN
     );
-    logic                           counter_ena = INITIAL_COUNTER_ENA;
-    logic [3:0]                     counter     = INITIAL_COUNTER;
-    logic [NUM_OF_BITS+3 : 0]       buffer      = INITIAL_BUFFER;
+    logic                       counter_ena = INITIAL_COUNTER_ENA;
+    logic [3:0]                 counter     = INITIAL_COUNTER;
+    logic [NUM_OF_BITS+3 : 0]   buffer      = INITIAL_BUFFER;
     
     Clk20MHz freq_20MHz(.clk_100MHz(Clk), .clk_20MHz(SCLK));
 
     always_ff @(posedge SCLK) begin
-        if (!Rst_n || counter == 0) begin
+        if (!Rst_n) begin
             counter <= INITIAL_COUNTER;
         end
         else if (counter_ena) begin
