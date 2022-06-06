@@ -5,7 +5,7 @@
 // 
 // Create Date: 05/22/2022 09:42:25 PM
 // Design Name: 
-// Module Name: clk_wiz_0_tb
+// Module Name: ClkDiv_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,11 +20,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module clk_wiz_0_tb;
+module ClkDiv_tb;
     logic Clk_tb;
-    logic SCLK_tb;
-    
-    Clk20MHz dut(.clk_100MHz(Clk_tb), .clk_20MHz(SCLK_tb));
+    logic clk_1Hz_tb;
+    logic clk_15MHz_tb;
+    logic clk_20MHz_tb;
+
+
+    Clk1Hz freq_1Hz(.clk_100MHz(Clk_tb), .clk_1Hz(clk_1Hz_tb), .counter(counter_tb));    
+    Clk15MHz freq_15MHz(.clk_100MHz(Clk_tb), .clk_15MHz(clk_15MHz_tb));
+    Clk20MHz freq_20MHz(.clk_100MHz(Clk_tb), .clk_20MHz(clk_20MHz_tb));
     
     always #5 Clk_tb = ~Clk_tb;
     

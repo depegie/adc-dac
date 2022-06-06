@@ -21,15 +21,15 @@
 
 
 module DigitalSineGen #(
-    parameter BITS              = 12, // parametr określający liczbę bitów sygnału
-    parameter INITIAL_DATA_VAL  = 2**BITS/2, // początkowa wartość wyjścia
-    parameter INITIAL_DIRECTION = 1, // początkowy kierunek zliczania
-    parameter MIN_DATA_VAL      = 0, // minimum sygnału
-    parameter MAX_DATA_VAL      = 2**BITS - 1) // maksimum sygnału
+    parameter NUM_OF_BITS       = 4'd12, // parametr określający liczbę bitów sygnału
+    parameter INITIAL_DATA_VAL  = 2**NUM_OF_BITS/2, // początkowa wartość wyjścia
+    parameter INITIAL_DIRECTION = 1'b1, // początkowy kierunek zliczania
+    parameter MIN_DATA_VAL      = 12'd0, // minimum sygnału
+    parameter MAX_DATA_VAL      = 2**NUM_OF_BITS - 1) // maksimum sygnału
     (
-    input logic                 Clk, // wejście zegara
-    input logic                 Rst_n, // wejście resetu
-    output logic [BITS-1 : 0]   data    = INITIAL_DATA_VAL // wyjście generatora (domyślnie 12-bitowe)
+    input logic                         Clk, // wejście zegara
+    input logic                         Rst_n, // wejście resetu
+    output logic [NUM_OF_BITS-1 : 0]    data    = INITIAL_DATA_VAL // wyjście generatora (domyślnie 12-bitowe)
     );
     logic direction = INITIAL_DIRECTION; // kierunek zliczania - 1:rosnąco, 0:malejąco
     
@@ -64,5 +64,4 @@ module DigitalSineGen #(
             direction <= direction;
         end
     end
-    
 endmodule

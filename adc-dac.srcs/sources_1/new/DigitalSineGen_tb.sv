@@ -21,18 +21,16 @@
 
 
 module DigitalSineGen_tb #(
-    parameter BITS = 12);
+    parameter NUM_OF_BITS = 4'd12);
     
     logic Clk_tb;
     logic Rst_n_tb;
-    logic [BITS-1 : 0] data_tb;
-    logic direction_tb;
+    logic [NUM_OF_BITS-1 : 0] data_tb;
     
-    DigitalSineGen #(.BITS(BITS)) dut(
+    DigitalSineGen #(.NUM_OF_BITS(NUM_OF_BITS)) dut(
         .Clk(Clk_tb),
         .Rst_n(Rst_n_tb),
-        .data(data_tb),
-        .direction(direction_tb)
+        .data(data_tb)
     );
     
     always #1 Clk_tb = ~Clk_tb;

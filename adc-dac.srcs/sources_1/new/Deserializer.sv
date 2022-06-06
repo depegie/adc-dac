@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: Moduł zamieniający szeregowe dane na dane równoległe
+// Description: Moduł zamieniający wejście szeregowe na wyjście równoległe
 // 
 // Dependencies: 
 // 
@@ -21,12 +21,12 @@
 
 
 module Deserializer #(
-    parameter NUM_OF_BITS                   = 12,
+    parameter NUM_OF_BITS                   = 4'd12,
     parameter INITIAL_CSN                   = 1'b1,
     parameter INITIAL_DATAOUT               = 12'b0000_0000_0000,
     parameter INITIAL_COUNTER_ENA           = 1'b1,
-    parameter INITIAL_CSN_DRIVER_COUNTER    = 20,
-    parameter INITIAL_DATA_COUNTER          = 15,
+    parameter INITIAL_CSN_DRIVER_COUNTER    = 5'd20,
+    parameter INITIAL_DATA_COUNTER          = 4'd15,
     parameter INITIAL_DATA_VALID            = 1'b0,
     parameter INITIAL_BUFFER                = 12'b0000_0000_0000)
     (
@@ -42,7 +42,7 @@ module Deserializer #(
     logic                       data_valid         = INITIAL_DATA_VALID;
     logic [NUM_OF_BITS-1 : 0]   buffer             = INITIAL_BUFFER;
     
-    Clk20MHz freq_20MHz(.clk_100MHz(Clk), .clk_20MHz(SCLK));
+    Clk15MHz freq_15MHz(.clk_100MHz(Clk), .clk_15MHz(SCLK));
     
     always_ff @(posedge SCLK) begin
         if (!Rst_n || CSn_driver_counter == 0) begin

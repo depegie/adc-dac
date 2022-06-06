@@ -21,7 +21,7 @@
 
 
 module Serializer_tb #(
-    parameter NUM_OF_BITS = 12);
+    parameter NUM_OF_BITS = 4'd12);
 
     logic Clk_tb;
     logic Rst_n_tb;

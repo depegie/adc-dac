@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: Moduł definiujący konwerter wejścia równoległego na wyjście szeregowe
+// Description: Moduł zamieniający wejście równoległe na wyjście szeregowe
 // 
 // Dependencies: 
 // 
@@ -21,11 +21,11 @@
 
 
 module Serializer #(
-    parameter NUM_OF_BITS           = 12,
+    parameter NUM_OF_BITS           = 4'd12,
     parameter INITIAL_SYNCN         = 1'b1,
     parameter INITIAL_DIN           = 1'b0,
     parameter INITIAL_COUNTER_ENA   = 1'b1,
-    parameter INITIAL_COUNTER       = 15,
+    parameter INITIAL_COUNTER       = 4'd15,
     parameter INITIAL_BUFFER        = 16'b0000_0000_0000_0000)
     (
     input logic                     Clk,
@@ -40,7 +40,7 @@ module Serializer #(
     logic [NUM_OF_BITS+3 : 0]   buffer      = INITIAL_BUFFER;
     
     Clk20MHz freq_20MHz(.clk_100MHz(Clk), .clk_20MHz(SCLK));
-
+    
     always_ff @(posedge SCLK) begin
         if (!Rst_n) begin
             counter <= INITIAL_COUNTER;
