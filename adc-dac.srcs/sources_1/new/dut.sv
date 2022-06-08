@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 06/08/2022 05:11:36 PM
+// Create Date: 06/08/2022 07:02:27 PM
 // Design Name: 
 // Module Name: dut
 // Project Name: 
@@ -23,7 +23,7 @@
 module dut #(
     parameter NUM_OF_BITS = 4'd12)
     (
-    input logic Clk,
+    input logic Clock,
     input logic Rst_n,
     // ser (DA)
     output logic SCLK_20MHz,
@@ -40,8 +40,8 @@ module dut #(
     logic [NUM_OF_BITS-1 : 0]   DATAIN;
 //    logic [NUM_OF_BITS-1 : 0]   DATAOUT;
     
-    DigitalSineGen gen(.Clk(Clk), .Rst_n(Rst_n), .data(DATAIN), .clk_1kHz(clk_1kHz));
-    Serializer ser(.Clk(Clk), .Rst_n(Rst_n), .DATAIN(DATAIN), .SCLK(SCLK_20MHz), .SYNCn(SYNCn), .DIN(DIN));
-    Deserializer des(.Clk(Clk), .Rst_n(Rst_n), .SDATA(SDATA), .SCLK(SCLK_15MHz), .CSn(CSn), .DATAOUT(DATAOUT));
+    DigitalSineGen gen(.Clk(Clock), .Rst_n(Rst_n), .data(DATAIN));
+    Serializer ser(.Clk(Clock), .Rst_n(Rst_n), .DATAIN(DATAIN), .SCLK(SCLK_20MHz), .SYNCn(SYNCn), .DIN(DIN));
+    Deserializer des(.Clk(Clock), .Rst_n(Rst_n), .SDATA(SDATA), .SCLK(SCLK_15MHz), .CSn(CSn), .DATAOUT(DATAOUT));
     
 endmodule

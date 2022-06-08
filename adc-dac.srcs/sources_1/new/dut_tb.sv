@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 06/08/2022 05:32:44 PM
+// Create Date: 06/08/2022 07:01:40 PM
 // Design Name: 
 // Module Name: dut_tb
 // Project Name: 
@@ -41,7 +41,7 @@ module dut_tb #(
     logic [NUM_OF_BITS-1 : 0]   DATAOUT;
     
     dut dut(
-        .Clk(Clk),
+        .Clock(Clk),
         .Rst_n(Rst_n),
         .SCLK_20MHz(SCLK_20MHz),
         .SYNCn(SYNCn),
