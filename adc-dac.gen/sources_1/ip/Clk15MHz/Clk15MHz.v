@@ -56,23 +56,23 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_15MHz__15.00000______0.000______50.0______387.320____261.747
+// clk_15MHz__15.00000______0.000______50.0______378.659____261.747
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
 //----------------------------------------------------------------------------
-// __primary_________100.000____________0.010
+// __primary_________125.000____________0.010
 
 `timescale 1ps/1ps
 
-(* CORE_GENERATION_INFO = "Clk15MHz,clk_wiz_v6_0_9_0_0,{component_name=Clk15MHz,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=PLL,num_out_clk=1,clkin1_period=10.000,clkin2_period=10.000,use_power_down=false,use_reset=false,use_locked=false,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+(* CORE_GENERATION_INFO = "Clk15MHz,clk_wiz_v6_0_9_0_0,{component_name=Clk15MHz,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=PLL,num_out_clk=1,clkin1_period=8.000,clkin2_period=10.0,use_power_down=false,use_reset=false,use_locked=false,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
 
 module Clk15MHz 
  (
   // Clock out ports
   output        clk_15MHz,
  // Clock in ports
-  input         clk_100MHz
+  input         clk_125MHz
  );
 
   Clk15MHz_clk_wiz inst
@@ -80,7 +80,7 @@ module Clk15MHz
   // Clock out ports  
   .clk_15MHz(clk_15MHz),
  // Clock in ports
-  .clk_100MHz(clk_100MHz)
+  .clk_125MHz(clk_125MHz)
   );
 
 endmodule

@@ -1,10 +1,10 @@
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
-// Date        : Wed Jun  1 21:56:44 2022
+// Date        : Wed Jun  8 22:45:01 2022
 // Host        : laptop running 64-bit Ubuntu 20.04.4 LTS
-// Command     : write_verilog -force -mode funcsim -rename_top Clk20MHz -prefix
-//               Clk20MHz_ Clk20MHz_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim
+//               /home/danilo/Documents/adc-dac/adc-dac.gen/sources_1/ip/Clk20MHz/Clk20MHz_sim_netlist.v
 // Design      : Clk20MHz
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -15,38 +15,47 @@
 (* NotValidForBitStream *)
 module Clk20MHz
    (clk_20MHz,
-    clk_100MHz);
+    clk_125MHz);
   output clk_20MHz;
-  input clk_100MHz;
+  input clk_125MHz;
 
-  (* IBUF_LOW_PWR *) wire clk_100MHz;
+  (* IBUF_LOW_PWR *) wire clk_125MHz;
   wire clk_20MHz;
 
-  Clk20MHz_Clk20MHz_clk_wiz inst
-       (.clk_100MHz(clk_100MHz),
+  Clk20MHz_clk_wiz inst
+       (.clk_125MHz(clk_125MHz),
         .clk_20MHz(clk_20MHz));
 endmodule
 
-module Clk20MHz_Clk20MHz_clk_wiz
+module Clk20MHz_clk_wiz
    (clk_20MHz,
-    clk_100MHz);
+    clk_125MHz);
   output clk_20MHz;
-  input clk_100MHz;
+  input clk_125MHz;
 
-  wire clk_100MHz;
-  wire clk_100MHz_Clk20MHz;
+  wire clk_125MHz;
+  wire clk_125MHz_Clk20MHz;
   wire clk_20MHz;
   wire clk_20MHz_Clk20MHz;
   wire clkfbout_Clk20MHz;
   wire clkfbout_buf_Clk20MHz;
-  wire NLW_plle2_adv_inst_CLKOUT1_UNCONNECTED;
-  wire NLW_plle2_adv_inst_CLKOUT2_UNCONNECTED;
-  wire NLW_plle2_adv_inst_CLKOUT3_UNCONNECTED;
-  wire NLW_plle2_adv_inst_CLKOUT4_UNCONNECTED;
-  wire NLW_plle2_adv_inst_CLKOUT5_UNCONNECTED;
-  wire NLW_plle2_adv_inst_DRDY_UNCONNECTED;
-  wire NLW_plle2_adv_inst_LOCKED_UNCONNECTED;
-  wire [15:0]NLW_plle2_adv_inst_DO_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKFBOUTB_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKFBSTOPPED_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKINSTOPPED_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT0B_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT1_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT2_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT3_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT3B_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT4_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT5_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT6_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_DRDY_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_LOCKED_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_PSDONE_UNCONNECTED;
+  wire [15:0]NLW_mmcm_adv_inst_DO_UNCONNECTED;
 
   (* BOX_TYPE = "PRIMITIVE" *) 
   BUFG clkf_buf
@@ -59,65 +68,94 @@ module Clk20MHz_Clk20MHz_clk_wiz
   IBUF #(
     .IOSTANDARD("DEFAULT")) 
     clkin1_ibufg
-       (.I(clk_100MHz),
-        .O(clk_100MHz_Clk20MHz));
+       (.I(clk_125MHz),
+        .O(clk_125MHz_Clk20MHz));
   (* BOX_TYPE = "PRIMITIVE" *) 
   BUFG clkout1_buf
        (.I(clk_20MHz_Clk20MHz),
         .O(clk_20MHz));
   (* BOX_TYPE = "PRIMITIVE" *) 
-  PLLE2_ADV #(
+  MMCME2_ADV #(
     .BANDWIDTH("OPTIMIZED"),
-    .CLKFBOUT_MULT(41),
+    .CLKFBOUT_MULT_F(8.000000),
     .CLKFBOUT_PHASE(0.000000),
-    .CLKIN1_PERIOD(10.000000),
+    .CLKFBOUT_USE_FINE_PS("FALSE"),
+    .CLKIN1_PERIOD(8.000000),
     .CLKIN2_PERIOD(0.000000),
-    .CLKOUT0_DIVIDE(41),
+    .CLKOUT0_DIVIDE_F(50.000000),
     .CLKOUT0_DUTY_CYCLE(0.500000),
     .CLKOUT0_PHASE(0.000000),
+    .CLKOUT0_USE_FINE_PS("FALSE"),
     .CLKOUT1_DIVIDE(1),
     .CLKOUT1_DUTY_CYCLE(0.500000),
     .CLKOUT1_PHASE(0.000000),
+    .CLKOUT1_USE_FINE_PS("FALSE"),
     .CLKOUT2_DIVIDE(1),
     .CLKOUT2_DUTY_CYCLE(0.500000),
     .CLKOUT2_PHASE(0.000000),
+    .CLKOUT2_USE_FINE_PS("FALSE"),
     .CLKOUT3_DIVIDE(1),
     .CLKOUT3_DUTY_CYCLE(0.500000),
     .CLKOUT3_PHASE(0.000000),
+    .CLKOUT3_USE_FINE_PS("FALSE"),
+    .CLKOUT4_CASCADE("FALSE"),
     .CLKOUT4_DIVIDE(1),
     .CLKOUT4_DUTY_CYCLE(0.500000),
     .CLKOUT4_PHASE(0.000000),
+    .CLKOUT4_USE_FINE_PS("FALSE"),
     .CLKOUT5_DIVIDE(1),
     .CLKOUT5_DUTY_CYCLE(0.500000),
     .CLKOUT5_PHASE(0.000000),
+    .CLKOUT5_USE_FINE_PS("FALSE"),
+    .CLKOUT6_DIVIDE(1),
+    .CLKOUT6_DUTY_CYCLE(0.500000),
+    .CLKOUT6_PHASE(0.000000),
+    .CLKOUT6_USE_FINE_PS("FALSE"),
     .COMPENSATION("ZHOLD"),
-    .DIVCLK_DIVIDE(5),
+    .DIVCLK_DIVIDE(1),
     .IS_CLKINSEL_INVERTED(1'b0),
+    .IS_PSEN_INVERTED(1'b0),
+    .IS_PSINCDEC_INVERTED(1'b0),
     .IS_PWRDWN_INVERTED(1'b0),
     .IS_RST_INVERTED(1'b0),
     .REF_JITTER1(0.010000),
     .REF_JITTER2(0.010000),
+    .SS_EN("FALSE"),
+    .SS_MODE("CENTER_HIGH"),
+    .SS_MOD_PERIOD(10000),
     .STARTUP_WAIT("FALSE")) 
-    plle2_adv_inst
+    mmcm_adv_inst
        (.CLKFBIN(clkfbout_buf_Clk20MHz),
         .CLKFBOUT(clkfbout_Clk20MHz),
-        .CLKIN1(clk_100MHz_Clk20MHz),
+        .CLKFBOUTB(NLW_mmcm_adv_inst_CLKFBOUTB_UNCONNECTED),
+        .CLKFBSTOPPED(NLW_mmcm_adv_inst_CLKFBSTOPPED_UNCONNECTED),
+        .CLKIN1(clk_125MHz_Clk20MHz),
         .CLKIN2(1'b0),
         .CLKINSEL(1'b1),
+        .CLKINSTOPPED(NLW_mmcm_adv_inst_CLKINSTOPPED_UNCONNECTED),
         .CLKOUT0(clk_20MHz_Clk20MHz),
-        .CLKOUT1(NLW_plle2_adv_inst_CLKOUT1_UNCONNECTED),
-        .CLKOUT2(NLW_plle2_adv_inst_CLKOUT2_UNCONNECTED),
-        .CLKOUT3(NLW_plle2_adv_inst_CLKOUT3_UNCONNECTED),
-        .CLKOUT4(NLW_plle2_adv_inst_CLKOUT4_UNCONNECTED),
-        .CLKOUT5(NLW_plle2_adv_inst_CLKOUT5_UNCONNECTED),
+        .CLKOUT0B(NLW_mmcm_adv_inst_CLKOUT0B_UNCONNECTED),
+        .CLKOUT1(NLW_mmcm_adv_inst_CLKOUT1_UNCONNECTED),
+        .CLKOUT1B(NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED),
+        .CLKOUT2(NLW_mmcm_adv_inst_CLKOUT2_UNCONNECTED),
+        .CLKOUT2B(NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED),
+        .CLKOUT3(NLW_mmcm_adv_inst_CLKOUT3_UNCONNECTED),
+        .CLKOUT3B(NLW_mmcm_adv_inst_CLKOUT3B_UNCONNECTED),
+        .CLKOUT4(NLW_mmcm_adv_inst_CLKOUT4_UNCONNECTED),
+        .CLKOUT5(NLW_mmcm_adv_inst_CLKOUT5_UNCONNECTED),
+        .CLKOUT6(NLW_mmcm_adv_inst_CLKOUT6_UNCONNECTED),
         .DADDR({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
         .DCLK(1'b0),
         .DEN(1'b0),
         .DI({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        .DO(NLW_plle2_adv_inst_DO_UNCONNECTED[15:0]),
-        .DRDY(NLW_plle2_adv_inst_DRDY_UNCONNECTED),
+        .DO(NLW_mmcm_adv_inst_DO_UNCONNECTED[15:0]),
+        .DRDY(NLW_mmcm_adv_inst_DRDY_UNCONNECTED),
         .DWE(1'b0),
-        .LOCKED(NLW_plle2_adv_inst_LOCKED_UNCONNECTED),
+        .LOCKED(NLW_mmcm_adv_inst_LOCKED_UNCONNECTED),
+        .PSCLK(1'b0),
+        .PSDONE(NLW_mmcm_adv_inst_PSDONE_UNCONNECTED),
+        .PSEN(1'b0),
+        .PSINCDEC(1'b0),
         .PWRDWN(1'b0),
         .RST(1'b0));
 endmodule

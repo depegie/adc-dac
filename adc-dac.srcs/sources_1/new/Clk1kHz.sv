@@ -21,14 +21,14 @@
 
 
 module Clk1kHz #(
-    parameter DIVISOR = 17'd100_000)
+    parameter DIVISOR = 17'd125_000)
     (
-    input logic clk_100MHz,
+    input logic clk_125MHz,
     output logic clk_1kHz = 1'b0
     );
     logic [16:0] counter = 17'd0;
     
-    always_ff @(posedge clk_100MHz) begin
+    always_ff @(posedge clk_125MHz) begin
         if (counter >= DIVISOR - 1) begin
             counter <= 17'd0;
         end
@@ -37,7 +37,7 @@ module Clk1kHz #(
         end
     end
     
-    always_ff @(posedge clk_100MHz) begin
+    always_ff @(posedge clk_125MHz) begin
         if (counter < DIVISOR/2) begin
             clk_1kHz <= 1'b0;
         end

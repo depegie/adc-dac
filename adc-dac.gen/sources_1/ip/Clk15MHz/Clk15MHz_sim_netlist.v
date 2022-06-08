@@ -1,7 +1,7 @@
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
-// Date        : Fri Jun  3 22:12:44 2022
+// Date        : Wed Jun  8 22:18:12 2022
 // Host        : laptop running 64-bit Ubuntu 20.04.4 LTS
 // Command     : write_verilog -force -mode funcsim -rename_top Clk15MHz -prefix
 //               Clk15MHz_ Clk15MHz_sim_netlist.v
@@ -15,26 +15,26 @@
 (* NotValidForBitStream *)
 module Clk15MHz
    (clk_15MHz,
-    clk_100MHz);
+    clk_125MHz);
   output clk_15MHz;
-  input clk_100MHz;
+  input clk_125MHz;
 
-  (* IBUF_LOW_PWR *) wire clk_100MHz;
+  (* IBUF_LOW_PWR *) wire clk_125MHz;
   wire clk_15MHz;
 
   Clk15MHz_Clk15MHz_clk_wiz inst
-       (.clk_100MHz(clk_100MHz),
+       (.clk_125MHz(clk_125MHz),
         .clk_15MHz(clk_15MHz));
 endmodule
 
 module Clk15MHz_Clk15MHz_clk_wiz
    (clk_15MHz,
-    clk_100MHz);
+    clk_125MHz);
   output clk_15MHz;
-  input clk_100MHz;
+  input clk_125MHz;
 
-  wire clk_100MHz;
-  wire clk_100MHz_Clk15MHz;
+  wire clk_125MHz;
+  wire clk_125MHz_Clk15MHz;
   wire clk_15MHz;
   wire clk_15MHz_Clk15MHz;
   wire clkfbout_Clk15MHz;
@@ -59,8 +59,8 @@ module Clk15MHz_Clk15MHz_clk_wiz
   IBUF #(
     .IOSTANDARD("DEFAULT")) 
     clkin1_ibufg
-       (.I(clk_100MHz),
-        .O(clk_100MHz_Clk15MHz));
+       (.I(clk_125MHz),
+        .O(clk_125MHz_Clk15MHz));
   (* BOX_TYPE = "PRIMITIVE" *) 
   BUFG clkout1_buf
        (.I(clk_15MHz_Clk15MHz),
@@ -70,7 +70,7 @@ module Clk15MHz_Clk15MHz_clk_wiz
     .BANDWIDTH("OPTIMIZED"),
     .CLKFBOUT_MULT(33),
     .CLKFBOUT_PHASE(0.000000),
-    .CLKIN1_PERIOD(10.000000),
+    .CLKIN1_PERIOD(8.000000),
     .CLKIN2_PERIOD(0.000000),
     .CLKOUT0_DIVIDE(55),
     .CLKOUT0_DUTY_CYCLE(0.500000),
@@ -91,7 +91,7 @@ module Clk15MHz_Clk15MHz_clk_wiz
     .CLKOUT5_DUTY_CYCLE(0.500000),
     .CLKOUT5_PHASE(0.000000),
     .COMPENSATION("ZHOLD"),
-    .DIVCLK_DIVIDE(4),
+    .DIVCLK_DIVIDE(5),
     .IS_CLKINSEL_INVERTED(1'b0),
     .IS_PWRDWN_INVERTED(1'b0),
     .IS_RST_INVERTED(1'b0),
@@ -101,7 +101,7 @@ module Clk15MHz_Clk15MHz_clk_wiz
     plle2_adv_inst
        (.CLKFBIN(clkfbout_buf_Clk15MHz),
         .CLKFBOUT(clkfbout_Clk15MHz),
-        .CLKIN1(clk_100MHz_Clk15MHz),
+        .CLKIN1(clk_125MHz_Clk15MHz),
         .CLKIN2(1'b0),
         .CLKINSEL(1'b1),
         .CLKOUT0(clk_15MHz_Clk15MHz),

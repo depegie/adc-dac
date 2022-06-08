@@ -1,7 +1,7 @@
 -- Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
--- Date        : Fri Jun  3 22:12:44 2022
+-- Date        : Wed Jun  8 22:18:12 2022
 -- Host        : laptop running 64-bit Ubuntu 20.04.4 LTS
 -- Command     : write_vhdl -force -mode funcsim -rename_top Clk15MHz -prefix
 --               Clk15MHz_ Clk15MHz_sim_netlist.vhdl
@@ -17,12 +17,12 @@ use UNISIM.VCOMPONENTS.ALL;
 entity Clk15MHz_Clk15MHz_clk_wiz is
   port (
     clk_15MHz : out STD_LOGIC;
-    clk_100MHz : in STD_LOGIC
+    clk_125MHz : in STD_LOGIC
   );
 end Clk15MHz_Clk15MHz_clk_wiz;
 
 architecture STRUCTURE of Clk15MHz_Clk15MHz_clk_wiz is
-  signal clk_100MHz_Clk15MHz : STD_LOGIC;
+  signal clk_125MHz_Clk15MHz : STD_LOGIC;
   signal clk_15MHz_Clk15MHz : STD_LOGIC;
   signal clkfbout_Clk15MHz : STD_LOGIC;
   signal clkfbout_buf_Clk15MHz : STD_LOGIC;
@@ -56,8 +56,8 @@ clkin1_ibufg: unisim.vcomponents.IBUF
       IOSTANDARD => "DEFAULT"
     )
         port map (
-      I => clk_100MHz,
-      O => clk_100MHz_Clk15MHz
+      I => clk_125MHz,
+      O => clk_125MHz_Clk15MHz
     );
 clkout1_buf: unisim.vcomponents.BUFG
      port map (
@@ -69,7 +69,7 @@ plle2_adv_inst: unisim.vcomponents.PLLE2_ADV
       BANDWIDTH => "OPTIMIZED",
       CLKFBOUT_MULT => 33,
       CLKFBOUT_PHASE => 0.000000,
-      CLKIN1_PERIOD => 10.000000,
+      CLKIN1_PERIOD => 8.000000,
       CLKIN2_PERIOD => 0.000000,
       CLKOUT0_DIVIDE => 55,
       CLKOUT0_DUTY_CYCLE => 0.500000,
@@ -90,7 +90,7 @@ plle2_adv_inst: unisim.vcomponents.PLLE2_ADV
       CLKOUT5_DUTY_CYCLE => 0.500000,
       CLKOUT5_PHASE => 0.000000,
       COMPENSATION => "ZHOLD",
-      DIVCLK_DIVIDE => 4,
+      DIVCLK_DIVIDE => 5,
       IS_CLKINSEL_INVERTED => '0',
       IS_PWRDWN_INVERTED => '0',
       IS_RST_INVERTED => '0',
@@ -101,7 +101,7 @@ plle2_adv_inst: unisim.vcomponents.PLLE2_ADV
         port map (
       CLKFBIN => clkfbout_buf_Clk15MHz,
       CLKFBOUT => clkfbout_Clk15MHz,
-      CLKIN1 => clk_100MHz_Clk15MHz,
+      CLKIN1 => clk_125MHz_Clk15MHz,
       CLKIN2 => '0',
       CLKINSEL => '1',
       CLKOUT0 => clk_15MHz_Clk15MHz,
@@ -129,7 +129,7 @@ use UNISIM.VCOMPONENTS.ALL;
 entity Clk15MHz is
   port (
     clk_15MHz : out STD_LOGIC;
-    clk_100MHz : in STD_LOGIC
+    clk_125MHz : in STD_LOGIC
   );
   attribute NotValidForBitStream : boolean;
   attribute NotValidForBitStream of Clk15MHz : entity is true;
@@ -139,7 +139,7 @@ architecture STRUCTURE of Clk15MHz is
 begin
 inst: entity work.Clk15MHz_Clk15MHz_clk_wiz
      port map (
-      clk_100MHz => clk_100MHz,
+      clk_125MHz => clk_125MHz,
       clk_15MHz => clk_15MHz
     );
 end STRUCTURE;

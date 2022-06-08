@@ -39,7 +39,7 @@ module Serializer #(
     logic [3:0]                 counter     = INITIAL_COUNTER;      // licznik kontrolujący wystawianie prawidłowych bitów na wyjście
     logic [NUM_OF_BITS+3 : 0]   buffer      = INITIAL_BUFFER;       // bufor z dodatkowymi 4 zerowymu najstarszymi bitami
     
-    Clk20MHz freq_20MHz(.clk_100MHz(Clk), .clk_20MHz(SCLK));        // dzielnik częstotliwości
+    Clk20MHz freq_20MHz(.clk_125MHz(Clk), .clk_20MHz(SCLK));        // dzielnik częstotliwości
     
     // proces odpowiadający za działanie licznika i jego reset
     always_ff @(posedge SCLK) begin

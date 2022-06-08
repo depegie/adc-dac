@@ -26,11 +26,11 @@ module ClkDiv_tb;
     logic clk_15MHz_tb;
     logic clk_20MHz_tb;
 
-    Clk1kHz freq_1kHz(.clk_100MHz(Clk_tb), .clk_1kHz(clk_1kHz_tb));    
-    Clk15MHz freq_15MHz(.clk_100MHz(Clk_tb), .clk_15MHz(clk_15MHz_tb));
-    Clk20MHz freq_20MHz(.clk_100MHz(Clk_tb), .clk_20MHz(clk_20MHz_tb));
+    Clk1kHz freq_1kHz(.clk_125MHz(Clk_tb), .clk_1kHz(clk_1kHz_tb));    
+    Clk15MHz freq_15MHz(.clk_125MHz(Clk_tb), .clk_15MHz(clk_15MHz_tb));
+    Clk20MHz freq_20MHz(.clk_125MHz(Clk_tb), .clk_20MHz(clk_20MHz_tb));
     
-    always #5 Clk_tb = ~Clk_tb;
+    always #4 Clk_tb = ~Clk_tb;
     
     initial begin
         Clk_tb = 0;

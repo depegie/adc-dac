@@ -1,7 +1,0 @@
-verilog xil_defaultlib --include "../../../ipstatic" \
-"../../../../adc-dac.gen/sources_1/ip/Clk15MHz/Clk15MHz_clk_wiz.v" \
-"../../../../adc-dac.gen/sources_1/ip/Clk15MHz/Clk15MHz.v" \
-
-verilog xil_defaultlib "glbl.v"
-
-nosort

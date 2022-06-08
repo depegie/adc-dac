@@ -41,7 +41,7 @@ module Deserializer #(
     logic                       data_valid         = INITIAL_DATA_VALID;            // flaga sprawdzająca, czy na linii jest dana, czy pierwsze zero
     logic [NUM_OF_BITS-1 : 0]   buffer             = INITIAL_BUFFER;                // bufor
     
-    Clk15MHz freq_15MHz(.clk_100MHz(Clk), .clk_15MHz(SCLK));
+    Clk15MHz freq_15MHz(.clk_125MHz(Clk), .clk_15MHz(SCLK));
     
     always_ff @(posedge SCLK) begin
         if (!Rst_n || CSn_driver_counter == 0) begin

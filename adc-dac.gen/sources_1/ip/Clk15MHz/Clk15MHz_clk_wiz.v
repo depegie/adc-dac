@@ -56,12 +56,12 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_15MHz__15.00000______0.000______50.0______387.320____261.747
+// clk_15MHz__15.00000______0.000______50.0______378.659____261.747
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
 //----------------------------------------------------------------------------
-// __primary_________100.000____________0.010
+// __primary_________125.000____________0.010
 
 `timescale 1ps/1ps
 
@@ -70,15 +70,15 @@ module Clk15MHz_clk_wiz
  (// Clock in ports
   // Clock out ports
   output        clk_15MHz,
-  input         clk_100MHz
+  input         clk_125MHz
  );
   // Input buffering
   //------------------------------------
-wire clk_100MHz_Clk15MHz;
+wire clk_125MHz_Clk15MHz;
 wire clk_in2_Clk15MHz;
   IBUF clkin1_ibufg
-   (.O (clk_100MHz_Clk15MHz),
-    .I (clk_100MHz));
+   (.O (clk_125MHz_Clk15MHz),
+    .I (clk_125MHz));
 
 
 
@@ -118,13 +118,13 @@ wire clk_in2_Clk15MHz;
   #(.BANDWIDTH            ("OPTIMIZED"),
     .COMPENSATION         ("ZHOLD"),
     .STARTUP_WAIT         ("FALSE"),
-    .DIVCLK_DIVIDE        (4),
+    .DIVCLK_DIVIDE        (5),
     .CLKFBOUT_MULT        (33),
     .CLKFBOUT_PHASE       (0.000),
     .CLKOUT0_DIVIDE       (55),
     .CLKOUT0_PHASE        (0.000),
     .CLKOUT0_DUTY_CYCLE   (0.500),
-    .CLKIN1_PERIOD        (10.000))
+    .CLKIN1_PERIOD        (8.000))
   plle2_adv_inst
     // Output clocks
    (
@@ -137,7 +137,7 @@ wire clk_in2_Clk15MHz;
     .CLKOUT5             (clkout5_unused),
      // Input clock control
     .CLKFBIN             (clkfbout_buf_Clk15MHz),
-    .CLKIN1              (clk_100MHz_Clk15MHz),
+    .CLKIN1              (clk_125MHz_Clk15MHz),
     .CLKIN2              (1'b0),
      // Tied to always select the primary input clock
     .CLKINSEL            (1'b1),

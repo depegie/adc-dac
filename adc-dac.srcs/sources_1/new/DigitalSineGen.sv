@@ -34,7 +34,7 @@ module DigitalSineGen #(
     logic direction = INITIAL_DIRECTION;                            // kierunek zliczania - 1:rosnąco, 0:malejąco
     logic clk_1kHz;
     
-    Clk1kHz freq_1kHz(.clk_100MHz(Clk), .clk_1kHz(clk_1kHz));
+    Clk1kHz freq_1kHz(.clk_125MHz(Clk), .clk_1kHz(clk_1kHz));
     
     // proces odpowiadający za zmianę wielkości na wyjściu generatora
     always_ff @(posedge clk_1kHz) begin
