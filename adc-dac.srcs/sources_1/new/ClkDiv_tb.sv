@@ -22,12 +22,11 @@
 
 module ClkDiv_tb;
     logic Clk_tb;
-    logic clk_1Hz_tb;
+    logic clk_1kHz_tb;
     logic clk_15MHz_tb;
     logic clk_20MHz_tb;
 
-
-    Clk1Hz freq_1Hz(.clk_100MHz(Clk_tb), .clk_1Hz(clk_1Hz_tb), .counter(counter_tb));    
+    Clk1kHz freq_1kHz(.clk_100MHz(Clk_tb), .clk_1kHz(clk_1kHz_tb));    
     Clk15MHz freq_15MHz(.clk_100MHz(Clk_tb), .clk_15MHz(clk_15MHz_tb));
     Clk20MHz freq_20MHz(.clk_100MHz(Clk_tb), .clk_20MHz(clk_20MHz_tb));
     

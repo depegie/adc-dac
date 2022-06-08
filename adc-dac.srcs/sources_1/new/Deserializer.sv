@@ -21,26 +21,25 @@
 
 
 module Deserializer #(
-    parameter NUM_OF_BITS                   = 4'd12,
-    parameter INITIAL_CSN                   = 1'b1,
-    parameter INITIAL_DATAOUT               = 12'b0000_0000_0000,
-    parameter INITIAL_COUNTER_ENA           = 1'b1,
-    parameter INITIAL_CSN_DRIVER_COUNTER    = 5'd20,
-    parameter INITIAL_DATA_COUNTER          = 4'd15,
-    parameter INITIAL_DATA_VALID            = 1'b0,
-    parameter INITIAL_BUFFER                = 12'b0000_0000_0000)
+    parameter NUM_OF_BITS                   = 4'd12,                                // parametr określający liczbę bitów sygnału
+    parameter INITIAL_CSN                   = 1'b1,                                 // wartość początkowa linii SYNCn
+    parameter INITIAL_DATAOUT               = 12'b0000_0000_0000,                   // wartość początkowa danych wyjściowych
+    parameter INITIAL_CSN_DRIVER_COUNTER    = 5'd20,                                // wartość początkowa licznika sterującego linią CSn
+    parameter INITIAL_DATA_COUNTER          = 4'd15,                                // wartość początkowa licznika koordynującego wystawianie odpowiednich bitów na wyjście
+    parameter INITIAL_DATA_VALID            = 1'b0,                                 // wartość początkowa flagi data_valid
+    parameter INITIAL_BUFFER                = 12'b0000_0000_0000)                   // wartość początkowa bufora
     (
-    input logic                         Clk,
-    input logic                         Rst_n,
-    input logic                         SDATA,
-    output logic                        SCLK,
-    output logic                        CSn     = INITIAL_CSN,
-    output logic [NUM_OF_BITS-1 : 0]    DATAOUT = INITIAL_DATAOUT
+    input logic                         Clk,                                        // wejście zegara systemowego 100MHz
+    input logic                         Rst_n,                                      // wejście resetu
+    input logic                         SDATA,                                      // wejście danych szeregowych
+    output logic                        SCLK,                                       // wyjście zegara protokołu 15MHz
+    output logic                        CSn     = INITIAL_CSN,                      // wyjście linii CSn
+    output logic [NUM_OF_BITS-1 : 0]    DATAOUT = INITIAL_DATAOUT                   // wyjście danych równoległych DATAOUT
     );
-    logic [4:0]                 CSn_driver_counter = INITIAL_CSN_DRIVER_COUNTER;
-    logic [3:0]                 data_counter       = INITIAL_DATA_COUNTER;
-    logic                       data_valid         = INITIAL_DATA_VALID;
-    logic [NUM_OF_BITS-1 : 0]   buffer             = INITIAL_BUFFER;
+    logic [4:0]                 CSn_driver_counter = INITIAL_CSN_DRIVER_COUNTER;    // licznik sterujący linią CSn
+    logic [3:0]                 data_counter       = INITIAL_DATA_COUNTER;          // licznik koordynujący wystawianie odpowiednich bitów na wyjście
+    logic                       data_valid         = INITIAL_DATA_VALID;            // flaga sprawdzająca, czy na linii jest dana, czy pierwsze zero
+    logic [NUM_OF_BITS-1 : 0]   buffer             = INITIAL_BUFFER;                // bufor
     
     Clk15MHz freq_15MHz(.clk_100MHz(Clk), .clk_15MHz(SCLK));
     

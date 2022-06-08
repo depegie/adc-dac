@@ -21,20 +21,23 @@
 
 
 module DigitalSineGen #(
-    parameter NUM_OF_BITS       = 4'd12, // parametr określający liczbę bitów sygnału
-    parameter INITIAL_DATA_VAL  = 2**NUM_OF_BITS/2, // początkowa wartość wyjścia
-    parameter INITIAL_DIRECTION = 1'b1, // początkowy kierunek zliczania
-    parameter MIN_DATA_VAL      = 12'd0, // minimum sygnału
-    parameter MAX_DATA_VAL      = 2**NUM_OF_BITS - 1) // maksimum sygnału
+    parameter NUM_OF_BITS       = 4'd12,                            // parametr określający liczbę bitów sygnału
+    parameter INITIAL_DATA_VAL  = 2**NUM_OF_BITS/2,                 // początkowa wartość wyjścia
+    parameter INITIAL_DIRECTION = 1'b1,                             // początkowy kierunek zliczania
+    parameter MIN_DATA_VAL      = 12'd0,                            // minimum sygnału
+    parameter MAX_DATA_VAL      = 2**NUM_OF_BITS - 1)               // maksimum sygnału
     (
-    input logic                         Clk, // wejście zegara
-    input logic                         Rst_n, // wejście resetu
-    output logic [NUM_OF_BITS-1 : 0]    data    = INITIAL_DATA_VAL // wyjście generatora (domyślnie 12-bitowe)
+    input logic                         Clk,                        // wejście zegara
+    input logic                         Rst_n,                      // wejście resetu
+    output logic [NUM_OF_BITS-1 : 0]    data    = INITIAL_DATA_VAL  // wyjście generatora (domyślnie 12-bitowe)
     );
-    logic direction = INITIAL_DIRECTION; // kierunek zliczania - 1:rosnąco, 0:malejąco
+    logic direction = INITIAL_DIRECTION;                            // kierunek zliczania - 1:rosnąco, 0:malejąco
+    logic clk_1kHz;
+    
+    Clk1kHz freq_1kHz(.clk_100MHz(Clk), .clk_1kHz(clk_1kHz));
     
     // proces odpowiadający za zmianę wielkości na wyjściu generatora
-    always_ff @(posedge Clk) begin
+    always_ff @(posedge clk_1kHz) begin
         if (!Rst_n) begin
             data <= INITIAL_DATA_VAL;
         end
@@ -49,8 +52,8 @@ module DigitalSineGen #(
     // proces odpowiadający za decyzję, czy licznik ma rosnąć, czy maleć. Przed
     // rozpoczęciem skrajnej wartości następuje zmiana kireunku licznika. tym
     // sposobem wartość licznika znajduje się w przedziale 
-    // [MIN_OUTPUT_VAL ; MAX_OUTPUT_VAL], czyli domyślnie [0 ; 4095]
-    always_ff @(posedge Clk) begin
+    // [MIN_DATA_VAL ; MAX_DATA_VAL], czyli domyślnie [0 ; 4095]
+    always_ff @(posedge clk_1kHz) begin
         if (!Rst_n) begin
             direction <= INITIAL_DIRECTION;
         end
