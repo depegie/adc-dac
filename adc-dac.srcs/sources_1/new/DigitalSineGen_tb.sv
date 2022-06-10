@@ -20,14 +20,13 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module DigitalSineGen_tb #(
-    parameter NUM_OF_BITS = 4'd12);
+module DigitalSineGen_tb;
     
     logic Clk_tb;
     logic Rst_tb;
-    logic [NUM_OF_BITS-1 : 0] data_tb;
+    logic [11 : 0] data_tb;
     
-    DigitalSineGen #(.NUM_OF_BITS(NUM_OF_BITS)) dut(
+    DigitalSineGen dut(
         .Clk(Clk_tb),
         .Rst(Rst_tb),
         .data(data_tb)
@@ -39,8 +38,8 @@ module DigitalSineGen_tb #(
         Clk_tb = 0;
         Rst_tb = 0;
         
-        #20 Rst_tb = 1;
-        #30 Rst_tb = 0;
+        #20000000 Rst_tb = 1;
+        #20000005 Rst_tb = 0;
     end
     
 endmodule

@@ -20,19 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Serializer_tb #(
-    parameter NUM_OF_BITS = 4'd12);
+module Serializer_tb;
 
     logic Clk_tb;
     logic Rst_tb;
-    logic [NUM_OF_BITS-1 : 0] DATAIN_tb;
+    logic [11 : 0] DATAIN_tb;
     logic SCLK_tb;
     logic SYNCn_tb;
     logic DIN_tb;
-    
-//    logic counter_ena_tb;
-//    logic [3:0] counter_tb;
-//    logic [NUM_OF_BITS+3:0] buffer_tb;
     
     Serializer serial(
         .Clk(Clk_tb),
@@ -41,12 +36,9 @@ module Serializer_tb #(
         .SCLK(SCLK_tb),
         .SYNCn(SYNCn_tb),
         .DIN(DIN_tb)
-//        .counter_ena(counter_ena_tb),
-//        .counter(counter_tb),
-//        .buffer(buffer_tb)
     );
     
-    always #5 Clk_tb = ~Clk_tb;
+    always #4 Clk_tb = ~Clk_tb;
     
     initial begin
         Clk_tb = 0;
@@ -54,5 +46,7 @@ module Serializer_tb #(
         DATAIN_tb = 12'b1100_1001_0011;
         #5000 DATAIN_tb = 12'b1000_1001_0101;
         #5000 DATAIN_tb = 12'b0101_1000_1001;
+        #10000 Rst_tb = 1;
+        #11100 Rst_tb = 0;
     end
 endmodule

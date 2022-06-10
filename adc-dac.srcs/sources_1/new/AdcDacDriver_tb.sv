@@ -20,58 +20,58 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module AdcDacDriver_tb #(
-    parameter NUM_OF_BITS = 4'd12);
-    
+module AdcDacDriver_tb;
     // sys
-    logic Clk;
-    logic Rst_n;
+    logic Clk_tb;
+    logic Rst_tb;
     
     // od strony DA
-    logic SCLK_DAC;
-    logic SYNCn;
-    logic DIN;
+    logic SCLK_DAC_tb;
+    logic SYNCn_tb;
+    logic DIN_tb;
     
     // analog
-    logic [NUM_OF_BITS-1 : 0] V;
+    logic [11 : 0] V_tb;
     
     // od strony AD
-    logic SDATA;
-    logic SCLK_ADC;
-    logic CSn;
-    logic [NUM_OF_BITS-1 : 0]   DATAOUT;
+    logic SDATA_tb;
+    logic SCLK_ADC_tb;
+    logic CSn_tb;
+    logic [11 : 0]   DATAOUT_tb;
     
     AdcDacDriver dut(
-        .Clk(Clk),
-        .Rst_n(Rst_n),
-        .SCLK_DAC(SCLK_DAC),
-        .SYNCn(SYNCn),
-        .DIN(DIN),
-        .SDATA(SDATA),
-        .SCLK_ADC(SCLK_ADC),
-        .CSn(CSn),
-        .DATAOUT(DATAOUT)
+        .Clk(Clk_tb),
+        .Rst(Rst_tb),
+        .SCLK_DAC(SCLK_DAC_tb),
+        .SYNCn(SYNCn_tb),
+        .DIN(DIN_tb),
+        .SDATA(SDATA_tb),
+        .SCLK_ADC(SCLK_ADC_tb),
+        .CSn(CSn_tb)
     );
 
     PmodDA2 dac(
-        .SCLK(SCLK_DAC),
-        .SYNCn(SYNCn),
-        .DIN(DIN),
-        .VOUT(V)
+        .SCLK(SCLK_DAC_tb),
+        .SYNCn(SYNCn_tb),
+        .DIN(DIN_tb),
+        .VOUT(V_tb)
     );
     
     PmodAD1 adc(
-        .VIN(V),
-        .SCLK(SCLK_DAC),
-        .CSn(CSn),
-        .SDATA(SDATA)
+        .VIN(V_tb),
+        .SCLK(SCLK_DAC_tb),
+        .CSn(CSn_tb),
+        .SDATA(SDATA_tb)
     );
     
-    always #4 Clk = ~Clk;
+    always #4 Clk_tb = ~Clk_tb;
     
     initial begin
-        Clk = 0;
-        Rst_n = 1;
+        Clk_tb = 0;
+        Rst_tb = 0;
+        
+        #200000 Rst_tb = 1;
+        #200005 Rst_tb = 0;
     end
     
 endmodule

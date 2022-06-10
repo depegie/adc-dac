@@ -24,7 +24,7 @@ module AdcDacDriver #(
     parameter NUM_OF_BITS = 4'd12)
     (
     input logic Clk,
-    input logic Rst_n,
+    input logic Rst,
     
     output logic SCLK_DAC,
     output logic SYNCn,
@@ -40,9 +40,9 @@ module AdcDacDriver #(
     logic [NUM_OF_BITS-1 : 0]   DATAIN;
     logic [NUM_OF_BITS-1 : 0]   DATAOUT;
     
-    DigitalSineGen gen(.Clk(Clk), .Rst_n(Rst_n), .data(DATAIN));
-    Serializer ser(.Clk(Clk), .Rst_n(Rst_n), .DATAIN(DATAIN), .SCLK(SCLK_DAC), .SYNCn(SYNCn), .DIN(DIN));
-    Deserializer des(.Clk(Clk), .Rst_n(Rst_n), .SDATA(SDATA), .SCLK(SCLK_ADC), .CSn(CSn), .DATAOUT(DATAOUT));
+    DigitalSineGen gen(.Clk(Clk), .Rst(Rst), .data(DATAIN));
+    Serializer ser(.Clk(Clk), .Rst(Rst), .DATAIN(DATAIN), .SCLK(SCLK_DAC), .SYNCn(SYNCn), .DIN(DIN));
+    Deserializer des(.Clk(Clk), .Rst(Rst), .SDATA(SDATA), .SCLK(SCLK_ADC), .CSn(CSn), .DATAOUT(DATAOUT));
     ILA debug(.clk(SCLK_ADC), .probe0(DATAOUT));
     
 endmodule
