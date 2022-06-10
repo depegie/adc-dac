@@ -28,32 +28,33 @@ module AdcDacDriver_tb #(
     logic Rst_n;
     
     // od strony DA
-    logic SCLK_20MHz;
+    logic SCLK_DAC;
     logic SYNCn;
     logic DIN;
     
+    // analog
     logic [NUM_OF_BITS-1 : 0] V;
     
     // od strony AD
     logic SDATA;
-    logic SCLK_15MHz;
+    logic SCLK_ADC;
     logic CSn;
     logic [NUM_OF_BITS-1 : 0]   DATAOUT;
     
-    dut dut(
+    AdcDacDriver dut(
         .Clk(Clk),
         .Rst_n(Rst_n),
-        .SCLK_20MHz(SCLK_20MHz),
+        .SCLK_DAC(SCLK_DAC),
         .SYNCn(SYNCn),
         .DIN(DIN),
         .SDATA(SDATA),
-        .SCLK_15MHz(SCLK_15MHz),
+        .SCLK_ADC(SCLK_ADC),
         .CSn(CSn),
         .DATAOUT(DATAOUT)
     );
 
     PmodDA2 dac(
-        .SCLK(SCLK_20MHz),
+        .SCLK(SCLK_DAC),
         .SYNCn(SYNCn),
         .DIN(DIN),
         .VOUT(V)
@@ -61,7 +62,7 @@ module AdcDacDriver_tb #(
     
     PmodAD1 adc(
         .VIN(V),
-        .SCLK(SCLK_15MHz),
+        .SCLK(SCLK_DAC),
         .CSn(CSn),
         .SDATA(SDATA)
     );

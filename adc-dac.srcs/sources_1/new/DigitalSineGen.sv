@@ -28,7 +28,7 @@ module DigitalSineGen #(
     parameter MAX_DATA_VAL      = 2**NUM_OF_BITS - 1)               // maksimum sygnału
     (
     input logic                         Clk,                        // wejście zegara
-    input logic                         Rst_n,                      // wejście resetu
+    input logic                         Rst,                        // wejście resetu
     output logic [NUM_OF_BITS-1 : 0]    data    = INITIAL_DATA_VAL  // wyjście generatora (domyślnie 12-bitowe)
     );
     logic direction = INITIAL_DIRECTION;                            // kierunek zliczania - 1:rosnąco, 0:malejąco
@@ -38,7 +38,7 @@ module DigitalSineGen #(
     
     // proces odpowiadający za zmianę wielkości na wyjściu generatora
     always_ff @(posedge clk_1kHz) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             data <= INITIAL_DATA_VAL;
         end
         else if (direction) begin
@@ -54,7 +54,7 @@ module DigitalSineGen #(
     // sposobem wartość licznika znajduje się w przedziale 
     // [MIN_DATA_VAL ; MAX_DATA_VAL], czyli domyślnie [0 ; 4095]
     always_ff @(posedge clk_1kHz) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             direction <= INITIAL_DIRECTION;
         end
         else if (data == MAX_DATA_VAL-1) begin

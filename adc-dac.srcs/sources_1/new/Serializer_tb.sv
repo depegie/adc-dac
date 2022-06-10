@@ -24,7 +24,7 @@ module Serializer_tb #(
     parameter NUM_OF_BITS = 4'd12);
 
     logic Clk_tb;
-    logic Rst_n_tb;
+    logic Rst_tb;
     logic [NUM_OF_BITS-1 : 0] DATAIN_tb;
     logic SCLK_tb;
     logic SYNCn_tb;
@@ -36,7 +36,7 @@ module Serializer_tb #(
     
     Serializer serial(
         .Clk(Clk_tb),
-        .Rst_n(Rst_n_tb),
+        .Rst(Rst_tb),
         .DATAIN(DATAIN_tb),
         .SCLK(SCLK_tb),
         .SYNCn(SYNCn_tb),
@@ -50,7 +50,7 @@ module Serializer_tb #(
     
     initial begin
         Clk_tb = 0;
-        Rst_n_tb = 1;
+        Rst_tb = 0;
         DATAIN_tb = 12'b1100_1001_0011;
         #5000 DATAIN_tb = 12'b1000_1001_0101;
         #5000 DATAIN_tb = 12'b0101_1000_1001;

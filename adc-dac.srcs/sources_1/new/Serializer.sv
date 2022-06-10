@@ -29,7 +29,7 @@ module Serializer #(
     parameter INITIAL_BUFFER        = 16'b0000_0000_0000_0000)      // wartość początkowa bufora
     (
     input logic                     Clk,                            // wejście zegara systemowego 100MHz
-    input logic                     Rst_n,                          // wejście resetu
+    input logic                     Rst,                            // wejście resetu
     input logic [NUM_OF_BITS-1 : 0] DATAIN,                         // wejście danych równoległych
     output logic                    SCLK,                           // wyjście zegara protokołu 20MHz
     output logic                    SYNCn   = INITIAL_SYNCN,        // wyjście linii SYNCn
@@ -39,11 +39,11 @@ module Serializer #(
     logic [3:0]                 counter     = INITIAL_COUNTER;      // licznik kontrolujący wystawianie prawidłowych bitów na wyjście
     logic [NUM_OF_BITS+3 : 0]   buffer      = INITIAL_BUFFER;       // bufor z dodatkowymi 4 zerowymu najstarszymi bitami
     
-    Clk20MHz freq_20MHz(.clk_125MHz(Clk), .clk_20MHz(SCLK));        // dzielnik częstotliwości
+    Clk15MHz freq_15MHz(.clk_125MHz(Clk), .clk_15MHz(SCLK));        // dzielnik częstotliwości
     
     // proces odpowiadający za działanie licznika i jego reset
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             counter <= INITIAL_COUNTER;
         end
         else if (counter_ena) begin
@@ -56,7 +56,7 @@ module Serializer #(
     
     // proces odpowiadający za włącznik licznika i jego reset
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             counter_ena <= INITIAL_COUNTER_ENA;
         end
         else if (counter == 0) begin
@@ -72,7 +72,7 @@ module Serializer #(
     
     // proces odpowiadający za wysterowanie linii SYNCn i jej reset
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             SYNCn <= INITIAL_SYNCN;
         end
         else if (counter == 15) begin
@@ -85,7 +85,7 @@ module Serializer #(
     
     // proces odpowiadający za wysterowanie linii DIN i jej reset
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             DIN <= INITIAL_DIN;
         end
         else begin
@@ -95,7 +95,7 @@ module Serializer #(
     
     // proces odpowiadający za wypełnienie bufora danymi  i jego reset
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             buffer <= INITIAL_BUFFER;
         end
         else if (SYNCn) begin

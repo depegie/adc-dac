@@ -30,7 +30,7 @@ module Deserializer #(
     parameter INITIAL_BUFFER                = 12'b0000_0000_0000)                   // wartość początkowa bufora
     (
     input logic                         Clk,                                        // wejście zegara systemowego 100MHz
-    input logic                         Rst_n,                                      // wejście resetu
+    input logic                         Rst,                                        // wejście resetu
     input logic                         SDATA,                                      // wejście danych szeregowych
     output logic                        SCLK,                                       // wyjście zegara protokołu 15MHz
     output logic                        CSn     = INITIAL_CSN,                      // wyjście linii CSn
@@ -44,7 +44,7 @@ module Deserializer #(
     Clk15MHz freq_15MHz(.clk_125MHz(Clk), .clk_15MHz(SCLK));
     
     always_ff @(posedge SCLK) begin
-        if (!Rst_n || CSn_driver_counter == 0) begin
+        if (Rst || CSn_driver_counter == 0) begin
             CSn_driver_counter <= INITIAL_CSN_DRIVER_COUNTER;
         end
         else begin
@@ -53,7 +53,7 @@ module Deserializer #(
     end
 
     always_ff @(posedge SCLK) begin
-        if (!Rst_n || CSn_driver_counter == 0) begin
+        if (Rst || CSn_driver_counter == 0) begin
             data_counter <= INITIAL_DATA_COUNTER;
         end
         else if (data_counter > 0) begin
@@ -65,7 +65,7 @@ module Deserializer #(
     end    
 
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             data_valid <= INITIAL_DATA_VALID;
         end
         else if (data_counter == 12) begin
@@ -80,7 +80,7 @@ module Deserializer #(
     end
     
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             CSn <= INITIAL_CSN;
         end
         else if (CSn_driver_counter == 0) begin
@@ -95,7 +95,7 @@ module Deserializer #(
     end
     
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             buffer <= INITIAL_BUFFER;
         end
         else if (data_valid) begin
@@ -104,7 +104,7 @@ module Deserializer #(
     end
     
     always_ff @(posedge SCLK) begin
-        if (!Rst_n) begin
+        if (Rst) begin
             DATAOUT <= INITIAL_DATAOUT;
         end
         else if (CSn) begin

@@ -22,7 +22,7 @@
 
 module Deserializer_tb;
     logic Clk_tb;
-    logic Rst_n_tb;
+    logic Rst_tb;
     
     logic [11:0] DATAIN_tb;
     
@@ -39,17 +39,16 @@ module Deserializer_tb;
     logic [11:0] DATAOUT_tb;
     
 //    DigitalSineGen #(.BITS(12)) generator(.out(digital_in));
-    Serializer serial(.Clk(Clk_tb), .Rst_n(Rst_n_tb), .DATAIN(DATAIN_tb), .SCLK(SCLK_dac_tb), .SYNCn(SYNCn_dac_tb), .DIN(DIN_dac_tb));
+    Serializer serial(.Clk(Clk_tb), .Rst(Rst_tb), .DATAIN(DATAIN_tb), .SCLK(SCLK_dac_tb), .SYNCn(SYNCn_dac_tb), .DIN(DIN_dac_tb));
     PmodDA2 dac(.SCLK(SCLK_dac_tb), .SYNCn(SYNCn_dac_tb), .DIN(DIN_dac_tb), .VOUT(V_tb));
     PmodAD1 adc(.SCLK(SCLK_adc_tb), .CSn(CSn_adc_tb), .SDATA(SDATA_adc_tb), .VIN(V_tb));
-    Deserializer deserial(.Clk(Clk_tb), .Rst_n(Rst_n_tb), .SCLK(SCLK_adc_tb), .CSn(CSn_adc_tb), .SDATA(SDATA_adc_tb), .DATAOUT(DATAOUT_tb));
+    Deserializer deserial(.Clk(Clk_tb), .Rst(Rst_tb), .SCLK(SCLK_adc_tb), .CSn(CSn_adc_tb), .SDATA(SDATA_adc_tb), .DATAOUT(DATAOUT_tb));
     
     always #5 Clk_tb = ~Clk_tb;
     
     initial begin
         Clk_tb = 0;
-        Rst_n_tb = 1;
-//        SDATA_adc_tb = 0;
+        Rst_tb = 0;
         DATAIN_tb = 12'b1100_1001_0011;
         #10000 DATAIN_tb = 12'b1000_1001_0101;
         #10000 DATAIN_tb = 12'b0101_1000_1001;
