@@ -1,2 +1,0 @@
-ILA.v,verilog,xil_defaultlib,../../../../adc-dac.gen/sources_1/ip/ILA/sim/ILA.v,incdir="../../../../adc-dac.gen/sources_1/ip/ILA/hdl/verilog"
-glbl.v,Verilog,xil_defaultlib,glbl.v

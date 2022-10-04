@@ -1,3 +1,0 @@
-Clk15MHz_clk_wiz.v,verilog,xil_defaultlib,../../../../adc-dac.gen/sources_1/ip/Clk15MHz/Clk15MHz_clk_wiz.v,incdir="$ref_dir/../../../ipstatic"incdir="../../../../adc-dac.gen/sources_1/ip/Clk15MHz"
-Clk15MHz.v,verilog,xil_defaultlib,../../../../adc-dac.gen/sources_1/ip/Clk15MHz/Clk15MHz.v,incdir="$ref_dir/../../../ipstatic"incdir="../../../../adc-dac.gen/sources_1/ip/Clk15MHz"
-glbl.v,Verilog,xil_defaultlib,glbl.v
